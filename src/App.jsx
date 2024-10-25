@@ -4,7 +4,11 @@ import Login from './Pages/login-page'; // Página de login
 import Register from './Pages/register'; // Página de registro
 import HomePage from './Pages/HomePage'; // Página principal (home)
 import HowItWorks from './Pages/HowItWorks'; // Página de cómo funciona
+
 import AboutSection from './Pages/AboutSection'; // Página de Quiénes Somos
+
+import PricingTier from './Pages/PricingTier'; //Página de precios
+
 
 function App() {
   return (
@@ -18,8 +22,13 @@ function App() {
         <Route path="/register" element={<Register />} />
         {/* Ruta para la página "Cómo Funciona" */}
         <Route path="/how-it-works" element={<HowItWorks />} />
+
         {/* Ruta para la página "Quiénes Somos" */}
         <Route path="/about" element={<AboutSection />} /> {/* Nueva ruta para la página de Quiénes Somos */}
+
+        {/* Ruta para la página "Precios" */}
+        <Route path="/prices" element={<PricingTier />} />
+
       </Routes>
     </Router>
   );
