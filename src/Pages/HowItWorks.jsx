@@ -1,7 +1,6 @@
 import { ChartBar, CreditCard, PiggyBank, ArrowRightLeft } from "lucide-react";
 import { useNavigate } from "react-router-dom"; // Importar useNavigate para redirigir al home
-import { ArrowLeft } from "lucide-react"; // Importar ícono de flecha
-import Navbar from "../Componentes/Navbar";
+import Navbar from "../components/ui/Componentes/Navbar";
 
 export default function HowItWorks() {
   const navigate = useNavigate(); // Hook para redirigir al home
@@ -39,8 +38,7 @@ export default function HowItWorks() {
         <div className="container mx-auto px-4">
           <h2 className="text-3xl font-bold text-center text-gray-900 mb-8">How SmartWallet Works</h2>
           <p className="text-center text-gray-600 max-w-2xl mx-auto mb-12">
-            SmartWallet simplifies your financial life by providing powerful tools to manage your money effectively.
-            Here's how our app helps you take control of your finances:
+            SmartWallet simplifies your financial life by providing powerful tools to manage your money effectively. Here is how our app helps you take control of your finances:
           </p>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
             {features.map((feature, index) => (

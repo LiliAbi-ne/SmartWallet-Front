@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Link, useNavigate } from "react-router-dom"; // Importar Link y useNavigate
-import Navbar from "../Componentes/Navbar";
+import Navbar from "../components/ui/Componentes/Navbar";
+import Fondo from "../assets/fonfo.jpg"
 
 
 export default function HomePage() {
@@ -10,7 +11,7 @@ export default function HomePage() {
     <div
       className="min-h-screen bg-cover bg-center"
       style={{
-        backgroundImage: `linear-gradient(to right, rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.7)), url(/img/fonfo.jpg)`, // Ruta al fondo
+        backgroundImage: `linear-gradient(to right, rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.7)), url(${Fondo}`, // Ruta al fondo
         backgroundSize: "cover",
         backgroundRepeat: "no-repeat",
         backgroundPosition: "center",
