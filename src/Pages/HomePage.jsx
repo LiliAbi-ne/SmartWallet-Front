@@ -20,9 +20,9 @@ export default function HomePage() {
           <span className="text-xl font-bold text-teal-600">SmartWallet</span>
         </div>
         <nav className="hidden md:flex space-x-6">
-          {/* Rutas actualizadas para "Como Funciona" */}
+          {/* Rutas actualizadas para "Cómo Funciona" y "Quiénes somos" */}
           <Link to="/how-it-works" className="text-gray-600 hover:text-teal-600">Cómo Funciona</Link>
-          <Link to="#" className="text-gray-600 hover:text-teal-600">Quiénes somos</Link>
+          <Link to="/about" className="text-gray-600 hover:text-teal-600">Quiénes somos</Link> {/* Redirige a la página de AboutSection */}
           <Link to="#" className="text-gray-600 hover:text-teal-600">Planes que te ofrecemos</Link>
         </nav>
         <div className="flex items-center space-x-4">
