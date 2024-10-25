@@ -16,7 +16,9 @@ export default function HomePage() {
         backgroundPosition: "center",
       }}
     >
+
       <Navbar />
+
       <main className="container mx-auto px-6 py-12 flex flex-col md:flex-row items-center">
         <div className="md:w-1/2 mb-8 md:mb-0">
           <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
