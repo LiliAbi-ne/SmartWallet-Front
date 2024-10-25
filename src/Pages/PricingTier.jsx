@@ -1,6 +1,7 @@
 import { Check, X } from 'lucide-react'
 import { useState } from 'react'
-import Navbar from '../Componentes/Navbar'
+import PropTypes from 'prop-types'  // Importa PropTypes
+import Navbar from '../components/ui/Componentes/Navbar'
 
 const PricingTier = ({ name, price, features, recommended }) => (
   <div className={`flex flex-col p-2 bg-white rounded-lg shadow-md ${recommended ? 'border-2 border-green-500' : ''}`}>
@@ -28,6 +29,19 @@ const PricingTier = ({ name, price, features, recommended }) => (
     </button>
   </div>
 )
+
+// Definir PropTypes
+PricingTier.propTypes = {
+  name: PropTypes.string.isRequired,  // name es obligatorio y debe ser string
+  price: PropTypes.oneOfType([PropTypes.number, PropTypes.string]).isRequired,  // price puede ser número o string, y es obligatorio
+  features: PropTypes.arrayOf(
+    PropTypes.shape({
+      text: PropTypes.string.isRequired,  // Cada feature debe tener un 'text' string
+      included: PropTypes.bool.isRequired,  // Cada feature debe tener 'included' booleano
+    })
+  ).isRequired,  // features es un array de objetos y es obligatorio
+  recommended: PropTypes.bool  // recommended es booleano y opcional
+}
 
 // COMPONENTE QUE CARGA LOS DATOS DE LOS PAQUETES
 export default function Component() {
@@ -77,8 +91,6 @@ export default function Component() {
             </p>
           </div>
 
-
-
           <div className="mt-12 space-y-4 sm:mt-16 sm:space-y-0 sm:grid sm:grid-cols-2 sm:gap-6 lg:max-w-4xl lg:mx-auto xl:max-w-none xl:mx-0 xl:grid-cols-2">
             {pricingData.map((tier, index) => (
               <PricingTier
@@ -93,6 +105,5 @@ export default function Component() {
         </div>
       </div>
     </div>
-
   )
 }

@@ -1,3 +1,4 @@
+<<<<<<< Updated upstream
 import './App.css';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'; // Importar BrowserRouter
 import Login from './Pages/login-page'; // Página de login
@@ -8,6 +9,16 @@ import HowItWorks from './Pages/HowItWorks'; // Página de cómo funciona
 import AboutSection from './Pages/AboutSection'; // Página de Quiénes Somos
 
 import PricingTier from './Pages/PricingTier'; //Página de precios
+=======
+import "./App.css";
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom"; // Importar BrowserRouter
+import Login from "./Pages/login-page"; // Página de login
+import Register from "./Pages/register"; // Página de registro
+import HomePage from "./Pages/HomePage"; // Página principal (home)
+import HowItWorks from "./Pages/HowItWorks"; // Página de cómo funciona
+import PricingTier from "./Pages/PricingTier"; //Página de precios
+import GoalsPage from "./Pages/GoalsPage";
+>>>>>>> Stashed changes
 
 
 function App() {
@@ -28,7 +39,11 @@ function App() {
 
         {/* Ruta para la página "Precios" */}
         <Route path="/prices" element={<PricingTier />} />
+<<<<<<< Updated upstream
 
+=======
+        <Route path="/goals" element={<GoalsPage />} />
+>>>>>>> Stashed changes
       </Routes>
     </Router>
   );
