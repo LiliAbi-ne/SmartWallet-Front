@@ -1,22 +1,26 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom' // Importar BrowserRouter
-import Login from './Pages/login-page'
-import Register from './Pages/register'
+import { useState } from 'react';
+import './App.css';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'; // Importar BrowserRouter
+import Login from './Pages/login-page'; // Página de login
+import Register from './Pages/register'; // Página de registro
+import HomePage from './Pages/HomePage'; // Página principal (home)
+import HowItWorks from './Pages/HowItWorks'; // Página de cómo funciona
 
 function App() {
-  const [count, setCount] = useState(0)
-
   return (
-   <Router>
-    <Routes>
-      <Route path="/login" element={<Login />} />
-      <Route path="/register" element={<Register />} />
-    </Routes>
-   </Router>
-  )
+    <Router>
+      <Routes>
+        {/* Ruta para la página principal */}
+        <Route path="/" element={<HomePage />} />
+        {/* Ruta para la página de login */}
+        <Route path="/login" element={<Login />} />
+        {/* Ruta para la página de registro */}
+        <Route path="/register" element={<Register />} />
+        {/* Ruta para la página "Cómo Funciona" */}
+        <Route path="/how-it-works" element={<HowItWorks />} />
+      </Routes>
+    </Router>
+  );
 }
 
-export default App
+export default App;
