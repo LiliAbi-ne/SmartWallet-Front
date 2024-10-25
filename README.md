@@ -20,3 +20,7 @@ Tienen que hacer todos los pasos para la instalación del Tailwind
 
 ## IGNORAR ## 
 npm install lucide-react
+
+
+Escaneo
+Presupuestos
