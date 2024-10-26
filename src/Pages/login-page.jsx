@@ -59,8 +59,10 @@ export default function Login() {
             transition={{ delay: 0.3 }}
           >
             <div className="flex justify-between font-bold">
-              <img src="../img/Logo.jpg" className="h-10 mb-4" />
-              <h1 className="text-2xl font-bold text-gray-800">Iniciar sesión</h1>
+              <div>
+                <img src="../img/Logo.jpg" className="h-10 mb-4" />
+                <h1 className="text-2xl font-bold text-gray-800">Iniciar sesión</h1>
+              </div>
               <Link to="/" className="text-xl">X</Link>
             </div>
 

@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { Link, useNavigate } from "react-router-dom"; // Importar Link y useNavigate
-import Navbar from "../Componentes/Navbar";
+import Navbar from "../components/ui/Componentes/Navbar";
 
 
 export default function HomePage() {

@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { motion } from 'framer-motion'
-import { Route } from 'react-router-dom'
+import { Route, Link } from 'react-router-dom'
 
 
 export default function Register() {
@@ -59,8 +59,13 @@ export default function Register() {
             animate="visible"
             transition={{ delay: 0.3 }}
           >
-            <img src="../img/Logo.jpg" alt="Logo de SmartWallet" className="h-10 mb-4" />
-            <h1 className="text-2xl font-bold text-gray-800">Registrar cuenta</h1>
+            <div className="flex justify-between font-bold">
+              <div>
+                <img src="../img/Logo.jpg" className="h-10 mb-4" />
+                <h1 className="text-2xl font-bold text-gray-800">Registro</h1>
+              </div>
+              <Link to="/" className="text-xl">X</Link>
+            </div>
           </motion.div>
           <form onSubmit={handleSubmit} className="space-y-4">
             <motion.div variants={fadeIn} initial="hidden" animate="visible" transition={{ delay: 0.4 }}>

@@ -1,6 +1,6 @@
 import { Check, X } from 'lucide-react'
 import { useState } from 'react'
-import Navbar from '../Componentes/Navbar'
+import Navbar from "../components/ui/Componentes/Navbar";
 
 const PricingTier = ({ name, price, features, recommended }) => (
   <div className={`flex flex-col p-2 bg-white rounded-lg shadow-md ${recommended ? 'border-2 border-green-500' : ''}`}>
