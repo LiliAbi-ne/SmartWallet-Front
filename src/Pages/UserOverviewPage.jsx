@@ -1,16 +1,22 @@
 import { Button } from "../components/ui/button";
 import Sidebar from "../components/ui/Componentes/Sidebar";
 import Header from "../components/ui/Componentes/Header";
-import { BarChart, Bar, Cell, Pie, PieChart, ResponsiveContainer, XAxis, YAxis, Tooltip } from "recharts";
+import { BarChart, Bar, Cell, Pie, PieChart, ResponsiveContainer, XAxis, YAxis, Tooltip, Legend } from "recharts";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "../components/ui/Componentes/table";
-import { Home, Car, Gift, ShoppingBag } from "lucide-react"; // Ejemplos de iconos, puedes cambiarlos según tus necesidades
 
 // Datos de ejemplo para los gráficos
 const expenseData = [
-  { name: "Casa", value: 41.35, color: "#8b5cf6", icon: <Home /> },
-  { name: "Transporte", value: 13.47, color: "#3b82f6", icon: <Car /> },
-  { name: "Dulces", value: 9.97, color: "#22c55e", icon: <Gift /> },
-  { name: "Shopping", value: 3.35, color: "#ef4444", icon: <ShoppingBag /> },
+  { name: "Casa", value: 400 },
+  { name: "Transporte", value: 300 },
+  { name: "Dulces", value: 200 },
+  { name: "Shopping", value: 100 },
+];
+
+const expenseCategories = [
+  { name: "Casa", amount: 400 },
+  { name: "Transporte", amount: 300 },
+  { name: "Dulces", amount: 200 },
+  { name: "Shopping", amount: 100 },
 ];
 
 export default function UserOverviewPage() {
@@ -25,53 +31,36 @@ export default function UserOverviewPage() {
 
         {/* Sección de gráficos */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-          {/* Gráfico circular futurista */}
+          {/* Gráfico de barras */}
           <div className="bg-white p-4 shadow-md rounded-lg">
-            <h2 className="text-lg font-semibold mb-4">Gastos por categoría</h2>
+            <h2 className="text-lg font-semibold mb-4">Gastos por Categoría</h2>
             <ResponsiveContainer width="100%" height={300}>
-              <PieChart>
-                <Pie
-                  data={expenseData}
-                  dataKey="value"
-                  nameKey="name"
-                  cx="50%"
-                  cy="50%"
-                  innerRadius={60}
-                  outerRadius={80}
-                  paddingAngle={5}
-                  stroke="none"
-                >
-                  {expenseData.map((entry, index) => (
-                    <Cell key={`cell-${index}`} fill={entry.color} />
-                  ))}
-                </Pie>
-              </PieChart>
-            </ResponsiveContainer>
-            <div className="mt-4 space-y-2">
-              {expenseData.map((category, index) => (
-                <div key={index} className="flex items-center space-x-2 p-2 rounded-lg hover:bg-gray-100 transition-colors">
-                  <span className="text-xl" style={{ color: category.color }}>{category.icon}</span>
-                  <span className="text-sm font-medium">{category.name}</span>
-                  <span className="ml-auto text-gray-500 font-semibold">{category.value}%</span>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* Gráfico de barras futurista */}
-          <div className="bg-white p-4 shadow-md rounded-lg">
-            <h2 className="text-lg font-semibold mb-4">Resumen de Gastos</h2>
-            <ResponsiveContainer width="100%" height={300}>
-              <BarChart data={expenseData} barSize={30}>
-                <XAxis dataKey="name" axisLine={false} tickLine={false} />
-                <YAxis axisLine={false} tickLine={false} />
-                <Tooltip cursor={{ fill: 'rgba(0, 0, 0, 0.1)' }} />
-                <Bar dataKey="value" radius={[10, 10, 0, 0]}>
-                  {expenseData.map((entry, index) => (
-                    <Cell key={`cell-${index}`} fill={entry.color} />
+              <BarChart data={expenseCategories}>
+                <XAxis dataKey="name" />
+                <YAxis />
+                <Tooltip />
+                <Legend />
+                <Bar dataKey="amount" fill="#8884d8">
+                  {expenseCategories.map((entry, index) => (
+                    <Cell key={`cell-${index}`} fill={["#8b5cf6", "#3b82f6", "#22c55e", "#ef4444"][index % 4]} />
                   ))}
                 </Bar>
               </BarChart>
+            </ResponsiveContainer>
+          </div>
+
+          {/* Gráfico circular */}
+          <div className="bg-white p-4 shadow-md rounded-lg">
+            <h2 className="text-lg font-semibold mb-4">Distribución de Gastos</h2>
+            <ResponsiveContainer width="100%" height={300}>
+              <PieChart>
+                <Pie data={expenseData} dataKey="value" nameKey="name" cx="50%" cy="50%" outerRadius={80} fill="#8884d8">
+                  {expenseData.map((entry, index) => (
+                    <Cell key={`cell-${index}`} fill={["#8b5cf6", "#3b82f6", "#22c55e", "#ef4444"][index % 4]} />
+                  ))}
+                </Pie>
+                <Tooltip />
+              </PieChart>
             </ResponsiveContainer>
           </div>
         </div>
