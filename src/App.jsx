@@ -10,6 +10,7 @@ import ExpensesPage from "./Pages/ExpensesPage";
 import ReportsPage from "./Pages/ReportsPage";
 import EducationPage from "./Pages/EducationPage";
 import UserOverviewPage from "./Pages/UserOverviewPage"; // Añadir import de UserOverviewPage
+import AdminOverviewPage from "./Pages/AdminOverviewPage";
 
 function App() {
   return (
@@ -25,6 +26,7 @@ function App() {
         <Route path="/reports" element={<ReportsPage />} />
         <Route path="/education" element={<EducationPage />} />
         <Route path="/user-overview" element={<UserOverviewPage />} /> {/* Nueva ruta para UserOverviewPage */}
+        <Route path="/admin-overview" element={<AdminOverviewPage />} /> {/* Nueva ruta para UserOverviewPage */}
       </Routes>
     </Router>
   );

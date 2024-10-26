@@ -1,4 +1,3 @@
-import { Button } from "../components/ui/button";
 import Sidebar from "../components/ui/Componentes/Sidebar";
 import Header from "../components/ui/Componentes/Header";
 import { BarChart, Bar, Cell, Pie, PieChart, ResponsiveContainer, XAxis, YAxis, Tooltip, Legend } from "recharts";
