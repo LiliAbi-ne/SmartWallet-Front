@@ -11,7 +11,9 @@ import ReportsPage from "./Pages/ReportsPage";
 import EducationPage from "./Pages/EducationPage";
 import UserOverviewPage from "./Pages/UserOverviewPage";
 import AdminOverviewPage from "./Pages/AdminOverviewPage";
-import ProtectedRoute from "../src/components/ui/Componentes/Protected/ProtectedRoute"; // Importa ProtectedRoute
+import UserManagementPage from "./Pages/UserManagementPage";
+import AdminReportsPage from "./Pages/AdminReportsPage"; // Nueva importación
+import ProtectedRoute from "../src/components/ui/Componentes/Protected/ProtectedRoute";
 
 function App() {
   return (
@@ -43,11 +45,7 @@ function App() {
         />
         <Route
           path="/reports"
-          element={
-            <ProtectedRoute>
-              <ReportsPage />
-            </ProtectedRoute>
-          }
+          element={<ReportsPage />}
         />
         <Route
           path="/education"
@@ -67,11 +65,15 @@ function App() {
         />
         <Route
           path="/admin-overview"
-          element={
-            <ProtectedRoute>
-              <AdminOverviewPage />
-            </ProtectedRoute>
-          }
+          element={<AdminOverviewPage />}
+        />
+        <Route
+          path="/user-management"
+          element={<UserManagementPage />}
+        />
+        <Route
+          path="/admin-reports"
+          element={<AdminReportsPage />}
         />
       </Routes>
     </Router>
