@@ -59,9 +59,9 @@ function App() {
         <Route
           path="/education-admin"
           element={
-           
+            <ProtectedRoute>
               <EducationAdminPage />
-           
+            </ProtectedRoute>
           }
         />
         <Route
@@ -90,5 +90,3 @@ function App() {
 }
 
 export default App;
-
-//xdd
