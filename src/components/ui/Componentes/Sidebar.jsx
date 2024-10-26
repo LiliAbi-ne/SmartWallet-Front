@@ -1,4 +1,4 @@
-import { FileText, Target, GraduationCap, BarChart2, User } from "lucide-react";
+import { FileText, Target, GraduationCap, BarChart2, User, CircleDollarSign } from "lucide-react";
 import PropTypes from "prop-types";
 import Logo from "../../../assets/Logo.png";
 
@@ -16,6 +16,7 @@ export default function Sidebar() {
       <nav className="flex-grow">
         <ul className="space-y-2 p-4">
           <MenuItem icon={<FileText size={20} />} label="Descripción" />
+          <MenuItem icon={<CircleDollarSign size={20}/>} label="Gastos"/>
           <MenuItem icon={<Target size={20} />} label="Metas" />
           <MenuItem icon={<GraduationCap size={20} />} label="Educación" />
           <MenuItem icon={<BarChart2 size={20} />} label="Reportes" />
