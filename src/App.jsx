@@ -9,10 +9,11 @@ import GoalsPage from "./Pages/GoalsPage";
 import ExpensesPage from "./Pages/ExpensesPage";
 import ReportsPage from "./Pages/ReportsPage";
 import EducationPage from "./Pages/EducationPage";
+import EducationAdminPage from "./Pages/EducationAdminPage"; // Nueva importación
 import UserOverviewPage from "./Pages/UserOverviewPage";
 import AdminOverviewPage from "./Pages/AdminOverviewPage";
 import UserManagementPage from "./Pages/UserManagementPage";
-import AdminReportsPage from "./Pages/AdminReportsPage"; // Nueva importación
+import AdminReportsPage from "./Pages/AdminReportsPage";
 import ProtectedRoute from "../src/components/ui/Componentes/Protected/ProtectedRoute";
 
 function App() {
@@ -53,6 +54,14 @@ function App() {
             <ProtectedRoute>
               <EducationPage />
             </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/education-admin"
+          element={
+           
+              <EducationAdminPage />
+           
           }
         />
         <Route
