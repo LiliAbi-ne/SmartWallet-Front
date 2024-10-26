@@ -24,3 +24,7 @@ npm install lucide-react
 
 Escaneo
 Presupuestos
+
+
+Instalar para ver graficos 
+npm install recharts
