@@ -9,11 +9,12 @@ import GoalsPage from "./Pages/GoalsPage";
 import ExpensesPage from "./Pages/ExpensesPage";
 import ReportsPage from "./Pages/ReportsPage";
 import EducationPage from "./Pages/EducationPage";
-import EducationAdminPage from "./Pages/EducationAdminPage"; // Nueva importación
+import EducationAdminPage from "./Pages/EducationAdminPage";
 import UserOverviewPage from "./Pages/UserOverviewPage";
 import AdminOverviewPage from "./Pages/AdminOverviewPage";
 import UserManagementPage from "./Pages/UserManagementPage";
 import AdminReportsPage from "./Pages/AdminReportsPage";
+import AboutSection from "./Pages/AboutSection"; // Nueva importación
 import ProtectedRoute from "../src/components/ui/Componentes/Protected/ProtectedRoute";
 
 function App() {
@@ -26,6 +27,7 @@ function App() {
         <Route path="/register" element={<Register />} />
         <Route path="/how-it-works" element={<HowItWorks />} />
         <Route path="/prices" element={<PricingTier />} />
+        <Route path="/about" element={<AboutSection />} /> {/* Ruta para AboutSection */}
 
         {/* Rutas protegidas */}
         <Route
@@ -44,10 +46,7 @@ function App() {
             </ProtectedRoute>
           }
         />
-        <Route
-          path="/reports"
-          element={<ReportsPage />}
-        />
+        <Route path="/reports" element={<ReportsPage />} />
         <Route
           path="/education"
           element={
@@ -72,18 +71,9 @@ function App() {
             </ProtectedRoute>
           }
         />
-        <Route
-          path="/admin-overview"
-          element={<AdminOverviewPage />}
-        />
-        <Route
-          path="/user-management"
-          element={<UserManagementPage />}
-        />
-        <Route
-          path="/admin-reports"
-          element={<AdminReportsPage />}
-        />
+        <Route path="/admin-overview" element={<AdminOverviewPage />} />
+        <Route path="/user-management" element={<UserManagementPage />} />
+        <Route path="/admin-reports" element={<AdminReportsPage />} />
       </Routes>
     </Router>
   );
