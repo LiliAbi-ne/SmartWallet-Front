@@ -1,51 +1,66 @@
-import { MoreVertical } from "lucide-react";
-// Añade más importaciones de logos según necesites
+import { useState, useEffect, useContext } from "react";
+import { AuthContext } from "../../../context/AuthContext";
+import { obtenerGastosPorUsuario, eliminarGasto } from "../../../api/gastosApi";
+import { getIconForCategory } from "../../../utils/iconsUtils";
+import { Edit, Trash2 } from "lucide-react";
+import EditExpenseModal from "./Modales/EditExpenseModal"; // Importa el modal de edición
+import PropTypes from "prop-types";
 
 export default function GastosList() {
-  const transactions = [
-    {
-      logo: null,
-      name: "Netflix",
-      date: "2024/03/29",
-      amount: "-$9.90",
-      amountColor: "text-red-500",
-    },
-    {
-      logo: null,
-      name: "Spotify",
-      date: "2024/03/29",
-      amount: "-$19.90",
-      amountColor: "text-red-500",
-    },
-    {
-      logo: null,
-      name: "Carl Andrew",
-      date: "2024/03/27",
-      amount: "+$400.00",
-      amountColor: "text-green-500",
-    },
-    {
-      logo: null,
-      name: "Carrefour Market",
-      date: "2024/03/26",
-      amount: "-$64.33",
-      amountColor: "text-red-500",
-    },
-    {
-      logo: null,
-      name: "Amazon",
-      date: "2024/03/24",
-      amount: "-$147.90",
-      amountColor: "text-red-500",
-    },
-    {
-      logo: null,
-      name: "Shopify",
-      date: "2024/03/21",
-      amount: "-$57.98",
-      amountColor: "text-red-500",
-    },
-  ];
+  const { token } = useContext(AuthContext);
+  const [gastos, setGastos] = useState([]);
+  const [selectedGasto, setSelectedGasto] = useState(null); // Gasto seleccionado para editar
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false); // Estado del modal de eliminación
+
+  const parseJwt = (token) => {
+    try {
+      const base64Url = token.split(".")[1];
+      const base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
+      return JSON.parse(window.atob(base64));
+    } catch {
+      return null;
+    }
+  };
+
+  const usuarioId = parseJwt(token)?.id;
+
+  const cargarGastos = async () => {
+    try {
+      const gastosUsuario = await obtenerGastosPorUsuario(usuarioId, token);
+      setGastos(gastosUsuario);
+    } catch (error) {
+      console.error("Error al cargar los gastos:", error);
+    }
+  };
+
+  useEffect(() => {
+    if (usuarioId) cargarGastos();
+  }, [usuarioId, token]);
+
+  // Función para abrir el modal de edición con el gasto seleccionado
+  const handleEditClick = (gasto) => {
+    setSelectedGasto(gasto);
+    setIsEditModalOpen(true);
+  };
+
+  // Función para abrir el modal de eliminación
+  const handleDeleteClick = (gasto) => {
+    setSelectedGasto(gasto);
+    setIsDeleteModalOpen(true);
+  };
+
+  // Confirmar eliminación del gasto
+  const confirmDelete = async () => {
+    try {
+      await eliminarGasto(selectedGasto.id_gasto, token); // Llamada a la API para eliminar el gasto
+      cargarGastos(); // Refrescar la lista de gastos
+      setIsDeleteModalOpen(false);
+      setSelectedGasto(null);
+    } catch (error) {
+      console.error("Error al eliminar el gasto:", error);
+    }
+  };
 
   return (
     <div className="bg-white rounded-lg shadow-md p-6 max-w-md mx-auto">
@@ -69,36 +84,81 @@ export default function GastosList() {
             </tr>
           </thead>
           <tbody>
-            {transactions.map((transaction, index) => (
+            {gastos.map((gasto, index) => (
               <tr key={index} className="border-b hover:bg-gray-50">
                 <td className="flex items-center px-4 py-2 space-x-3">
-                  {transaction.logo && (
-                    <img
-                      src={transaction.logo}
-                      alt={`${transaction.name} logo`}
-                      className="w-6 h-6 rounded-full"
-                    />
-                  )}
+                  <span>{getIconForCategory(gasto.nombre_categoria)}</span>
                   <span className="font-medium text-gray-700">
-                    {transaction.name}
+                    {gasto.nombre_categoria}
                   </span>
                 </td>
                 <td className="px-4 py-2 text-gray-500 text-sm">
-                  {transaction.date}
+                  {new Date(gasto.fecha).toLocaleDateString()}
                 </td>
                 <td
-                  className={`px-4 py-2 text-right font-semibold ${transaction.amountColor}`}
+                  className={`px-4 py-2 text-right font-semibold ${
+                    gasto.monto < 0 ? "text-red-500" : "text-red-500"
+                  }`}
                 >
-                  {transaction.amount}
+                  {gasto.monto < 0 ? `-${gasto.monto}` : `-${gasto.monto}`}
                 </td>
-                <td className="px-4 py-2 text-right">
-                  <MoreVertical className="text-gray-400 cursor-pointer" />
+                <td className="px-4 py-2 text-right flex space-x-2">
+                  <button onClick={() => handleEditClick(gasto)}>
+                    <Edit className="text-blue-500 cursor-pointer" />
+                  </button>
+                  <button onClick={() => handleDeleteClick(gasto)}>
+                    <Trash2 className="text-red-500 cursor-pointer" />
+                  </button>
                 </td>
               </tr>
             ))}
           </tbody>
         </table>
       </div>
+
+      {/* Modal de edición */}
+      {isEditModalOpen && selectedGasto && (
+        <EditExpenseModal
+          isOpen={isEditModalOpen}
+          onClose={() => setIsEditModalOpen(false)}
+          gasto={selectedGasto}
+          onExpenseUpdated={cargarGastos}
+        />
+      )}
+
+      {/* Modal de confirmación de eliminación */}
+      {isDeleteModalOpen && (
+        <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50">
+          <div className="bg-white rounded-lg shadow-lg w-80 p-6">
+            <h2 className="text-lg font-semibold mb-4">
+              ¿Seguro que deseas eliminar este gasto?
+            </h2>
+            <div className="flex justify-end space-x-2">
+              <button
+                onClick={() => setIsDeleteModalOpen(false)}
+                className="px-4 py-2 bg-gray-200 rounded-md hover:bg-gray-300"
+              >
+                Cancelar
+              </button>
+              <button
+                onClick={confirmDelete}
+                className="px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600"
+              >
+                Eliminar
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
+
+GastosList.propTypes = {
+  token: PropTypes.string,
+  setGastos: PropTypes.func,
+  selectedGasto: PropTypes.object,
+  isEditModalOpen: PropTypes.bool,
+  isDeleteModalOpen: PropTypes.bool,
+  confirmDelete: PropTypes.func,
+};
