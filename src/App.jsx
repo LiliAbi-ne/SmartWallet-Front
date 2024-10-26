@@ -6,7 +6,7 @@ import HomePage from "./Pages/HomePage"; // Página principal (home)
 import HowItWorks from "./Pages/HowItWorks"; // Página de cómo funciona
 import PricingTier from "./Pages/PricingTier"; //Página de precios
 import GoalsPage from "./Pages/GoalsPage";
-import EducationPage from "./Pages/EducationPage";
+import ExpensesPage from "./Pages/ExpensesPage";
 
 function App() {
   return (
@@ -23,7 +23,7 @@ function App() {
         {/* Ruta para la página "Precios" */}
         <Route path="/prices" element={<PricingTier />} />
         <Route path="/goals" element={<GoalsPage />} />
-        <Route path="/education" element={<EducationPage />} />
+        <Route path="/expenses" element={<ExpensesPage />} />
       </Routes>
     </Router>
   );
