@@ -4,7 +4,6 @@ import ScrollArea from "../components/ui/Componentes/scroll-area";
 import Header from "../components/ui/Componentes/Header";
 import SidebarAdmin from "../components/ui/Componentes/SidebarAdmin";
 import CardEducation from "../components/ui/Componentes/CardEducation";
-import { PlusCircle } from "lucide-react";
 import { fetchArticles } from "../services/newsAPI";
 
 export default function EducationAdminPage() {
@@ -24,7 +23,7 @@ export default function EducationAdminPage() {
     };
     getArticles();
   }, []);
-  
+
 
   return (
     <div className="flex h-screen bg-gray-100">
@@ -34,13 +33,7 @@ export default function EducationAdminPage() {
         <div className="mb-6">
           <h1 className="text-2xl font-bold text-green-700">Educación</h1>
           <div className="mt-2">
-            <Button
-              variant="ghost"
-              className="bg-gray-200 hover:bg-gray-300 text-black flex items-center space-x-2 rounded-lg p-2"
-            >
-              <PlusCircle className="h-5 w-5" />
-              <span>Agregar tema</span>
-            </Button>
+
           </div>
         </div>
 

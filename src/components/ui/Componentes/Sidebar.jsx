@@ -9,8 +9,15 @@ import {
 import PropTypes from "prop-types";
 import Logo from "../../../assets/Logo.png";
 import { Link } from "react-router-dom";
+import { useState } from "react";
 
 export default function Sidebar() {
+  const [isMenuOpen, setMenuOpen] = useState(false);
+
+  const toggleMenu = () => {
+    setMenuOpen(!isMenuOpen);
+  };
+
   return (
     <aside className="w-64 h-screen bg-[#F5F5F5] shadow-lg flex flex-col">
       <div className="p-4 flex items-center space-x-2">
@@ -46,13 +53,27 @@ export default function Sidebar() {
           />
         </ul>
       </nav>
-      <div className="p-4 border-t">
-        <div className="flex items-center space-x-3">
+      <div className="p-4 border-t relative">
+        <div
+          className="flex items-center space-x-3 cursor-pointer"
+          onClick={toggleMenu} // Abre o cierra el menú desplegable
+        >
           <div className="w-8 h-8 bg-gray-300 rounded-full flex items-center justify-center">
             <User size={20} />
           </div>
           <span className="text-sm font-medium">Usuario panel</span>
         </div>
+        {isMenuOpen && (
+          <div className="absolute bottom-16 left-4 bg-white shadow-lg rounded-lg p-2 w-48">
+            <Link
+              to="/user-configuration"
+              className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 rounded-md"
+              onClick={() => setMenuOpen(false)} // Cierra el menú al hacer clic
+            >
+              Configuración de cuenta
+            </Link>
+          </div>
+        )}
       </div>
     </aside>
   );
@@ -74,7 +95,7 @@ function MenuItem({ icon, label, to }) {
 
 // Añadir validación de prop-types
 MenuItem.propTypes = {
-  icon: PropTypes.node.isRequired, // Validar que 'icon' sea un nodo de React (puede ser un componente o un elemento JSX)
-  label: PropTypes.string.isRequired, // Validar que 'label' sea una cadena de texto
-  to: PropTypes.string.isRequired, 
+  icon: PropTypes.node.isRequired,
+  label: PropTypes.string.isRequired,
+  to: PropTypes.string.isRequired,
 };
