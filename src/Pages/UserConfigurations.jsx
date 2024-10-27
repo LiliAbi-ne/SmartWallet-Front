@@ -2,40 +2,27 @@ import Sidebar from "../components/ui/Componentes/Sidebar";
 import Header from "../components/ui/Componentes/Header";
 import UserProfileCard from "../components/ui/Componentes/UserProfileCard";
 import InformationCard from "../components/ui/Componentes/InformationCard";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import EditModal from "../components/ui/Componentes/Modales/EditUserModal";
 import PaymentModal from "../components/ui/Componentes/Modales/PaymentModal";
-import { obtenerPerfilUsuario, actualizarPerfilUsuario } from "../api/usuariosApi";
 
-
-export default function UserConfigurations({ token, usuario_id }) {
+export default function UserConfigurations() {
     const [isEditModalOpen, setEditModalOpen] = useState(false);
     const [isPaymentModalOpen, setPaymentModalOpen] = useState(false);
     const [selectedSection, setSelectedSection] = useState(null);
     const [editValue, setEditValue] = useState("");
-    const [userProfile, setUserProfile] = useState({
-        nombre: "",
-        email: "",
-        contraseña: "",
-        preferencias: { notificaciones: "", privacidad: "", cuenta: "Básica" },
-    });
 
-    useEffect(() => {
-        const fetchUserProfile = async () => {
-            try {
-                const perfilData = await obtenerPerfilUsuario(token, usuario_id);
-                setUserProfile({
-                    nombre: perfilData.nombre,
-                    email: perfilData.email,
-                    contraseña: "*****",
-                    preferencias: perfilData.preferencias,
-                });
-            } catch (error) {
-                console.error("Error al obtener perfil de usuario:", error);
-            }
-        };
-        fetchUserProfile();
-    }, [token, usuario_id]);
+    // Información de muestra para el perfil de usuario
+    const [userProfile, setUserProfile] = useState({
+        nombre: "Juan Pérez",
+        email: "juan.perez@example.com",
+        contraseña: "*****",
+        preferencias: {
+            notificaciones: "Activadas",
+            privacidad: "Pública",
+            cuenta: "Básica",
+        },
+    });
 
     const openEditModal = (section, value) => {
         setSelectedSection(section);
@@ -43,33 +30,24 @@ export default function UserConfigurations({ token, usuario_id }) {
         setEditModalOpen(true);
     };
 
-    // Maneja el cambio de tipo de cuenta y abre el modal de pago si se selecciona "Premium"
+    // Manejador para el cambio de tipo de cuenta
     const handleAccountTypeChange = (newAccountType) => {
         if (newAccountType === "Premium") {
             setPaymentModalOpen(true);
         } else {
-            actualizarPerfilUsuario(token, usuario_id, { cuenta: "Básica" })
-                .then(() => {
-                    setUserProfile((prevState) => ({
-                        ...prevState,
-                        preferencias: { ...prevState.preferencias, cuenta: "Básica" },
-                    }));
-                })
-                .catch((error) => console.error("Error al actualizar tipo de cuenta:", error));
+            setUserProfile((prevState) => ({
+                ...prevState,
+                preferencias: { ...prevState.preferencias, cuenta: "Básica" },
+            }));
         }
     };
 
-    const handleSaveChanges = async (newData) => {
-        try {
-            await actualizarPerfilUsuario(token, usuario_id, newData);
-            setUserProfile((prevProfile) => ({
-                ...prevProfile,
-                [selectedSection]: newData[selectedSection] || prevProfile[selectedSection],
-            }));
-            setEditModalOpen(false);
-        } catch (error) {
-            console.error("Error al actualizar perfil del usuario:", error);
-        }
+    const handleSaveChanges = (newData) => {
+        setUserProfile((prevProfile) => ({
+            ...prevProfile,
+            [selectedSection]: newData[selectedSection] || prevProfile[selectedSection],
+        }));
+        setEditModalOpen(false);
     };
 
     return (
