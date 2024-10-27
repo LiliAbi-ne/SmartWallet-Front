@@ -13,12 +13,20 @@ export default function Login() {
   const handleLogin = async (e) => {
     e.preventDefault();
     const data = await loginUsuario(email, password_usuario);
-    if (data.token) {
-      login(data.token);
-      navigate("/user-overview");
-      console.log("Usuario logeado con exito");
+    
+    if (data.token && data.rol) { // Verifica que el token y el rol están presentes
+      login(data.token, data.rol); // Guarda el token y el rol en el contexto
+
+      // Redirige basado en el rol
+      if (data.rol === "admin") {
+        navigate("/admin-overview"); // Redirige a la página de administración
+      } else {
+        navigate("/user-overview"); // Redirige a la vista general del usuario
+      }
+
+      console.log("Usuario logeado con éxito");
     } else {
-      console.error(data.error);
+      console.error(data.error || "Error al iniciar sesión");
     }
   };
 

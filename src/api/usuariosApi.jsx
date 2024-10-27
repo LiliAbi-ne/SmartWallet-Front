@@ -53,3 +53,26 @@ export const actualizarIngreso = async (token, usuario_id, ingresos) => {
     throw error;
   }
 };
+
+
+
+export const obtenerUsuarios = async () => {
+  try {
+    const response = await axios.get(`${import.meta.env.VITE_API_URL}/usuarios`);
+    return response.data;
+  } catch (error) {
+    console.error("Error al obtener usuarios:", error);
+    throw error;
+  }
+};
+
+
+export const eliminarUsuario = async (usuarioId) => {
+  try {
+    const response = await axios.delete(`${import.meta.env.VITE_API_URL}/usuarios/delete/${usuarioId}`);
+    return response.data;
+  } catch (error) {
+    console.error("Error al eliminar usuario:", error);
+    throw error;
+  }
+};

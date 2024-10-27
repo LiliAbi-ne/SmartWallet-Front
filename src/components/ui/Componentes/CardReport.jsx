@@ -5,7 +5,7 @@ import { Trash2 } from "lucide-react";
 export default function CardReport({ titulo, descripcion, fecha_creacion, onDelete }) {
   const fecha = new Date(fecha_creacion);
   const opciones = { day: 'numeric', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit', hour12: true, timeZone: 'UTC' };
-  const fechaFormateada = fecha.toLocaleDateString('es-ES', opciones);
+  const fechaFormateada = isNaN(fecha.getTime()) ? "Fecha no disponible" : fecha.toLocaleDateString('es-ES', opciones);
 
   return (
     <div className="w-full bg-white rounded-lg p-4 shadow-md flex flex-col justify-between mb-4">

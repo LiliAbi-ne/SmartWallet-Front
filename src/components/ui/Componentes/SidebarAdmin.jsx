@@ -15,15 +15,15 @@ export default function SidebarAdmin() {
           <MenuItem
             icon={<FileText size={20} />}
             label="Descripción"
-            to={"/"}
+            to={"/admin-overview"}
           />
-          <MenuItem icon={<Users size={20} />} label="Usuarios" to={"/"} />
+          <MenuItem icon={<Users size={20} />} label="Usuarios" to={"/user-management"} />
           <MenuItem
             icon={<GraduationCap size={20} />}
             label="Educación"
-            to={"/"}
+            to={"/admin-education"}
           />
-          <MenuItem icon={<BarChart2 size={20} />} label="Reportes" to={"/"} />
+          <MenuItem icon={<BarChart2 size={20} />} label="Reportes" to={"/admin-reports"} />
         </ul>
       </nav>
       <div className="p-4 border-t">
