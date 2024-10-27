@@ -25,3 +25,44 @@ export const obtenerCategoriasMeta = async () => {
     throw error;
   }
 };
+
+export const crearCategoriaGasto = async (nombre_categoria) => {
+  try {
+    const response = await axios.post(
+      `${import.meta.env.VITE_API_URL}/categoriasGastos/create`,
+      { nombre_categoria }
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Error al crear categoría:", error);
+    throw error;
+  }
+};
+
+export const actualizarCategoriaGasto = async (
+  categoria_gasto_id,
+  nombre_categoria
+) => {
+  try {
+    const response = await axios.put(
+      `${import.meta.env.VITE_API_URL}/categoriasGastos/update/${categoria_gasto_id}`,
+      { nombre_categoria }
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Error al actualizar categoría:", error);
+    throw error;
+  }
+};
+
+export const eliminarCategoriaGasto = async (categoria_gasto_id) => {
+  try {
+    const response = await axios.delete(
+      `${import.meta.env.VITE_API_URL}/categoriasGastos/delete/${categoria_gasto_id}`
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Error al eliminar categoría:", error);
+    throw error;
+  }
+};

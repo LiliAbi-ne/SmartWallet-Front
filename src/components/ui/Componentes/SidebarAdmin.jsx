@@ -1,4 +1,4 @@
-import { FileText, GraduationCap, BarChart2, User, Users } from "lucide-react";
+import { FileText, GraduationCap, BarChart2, User, Users, CircleDollarSign } from "lucide-react";
 import PropTypes from "prop-types";
 import Logo from "../../../assets/Logo.png";
 import { Link } from "react-router-dom";
@@ -24,7 +24,7 @@ export default function SidebarAdmin() {
             to={"/admin-education"}
           />
           <MenuItem icon={<BarChart2 size={20} />} label="Reportes" to={"/admin-reports"} />
-          <MenuItem icon={<FileText size={20} />} label="Categoría Gastos" to={"/expense-categories"} /> {/* Nueva categoría */}
+          <MenuItem icon={<CircleDollarSign size={20} />} label="Categoría Gastos" to={"/expense-categories"} /> {/* Nueva categoría */}
         </ul>
       </nav>
       <div className="p-4 border-t">
