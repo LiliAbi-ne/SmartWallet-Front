@@ -3,15 +3,15 @@ import { AuthContext } from "../../../context/AuthContext";
 import { obtenerGastosPorUsuario, eliminarGasto } from "../../../api/gastosApi";
 import { getIconForCategory } from "../../../utils/iconsUtils";
 import { Edit, Trash2 } from "lucide-react";
-import EditExpenseModal from "./Modales/EditExpenseModal"; // Importa el modal de edición
+import EditExpenseModal from "./Modales/EditExpenseModal";
 import PropTypes from "prop-types";
 
 export default function GastosList() {
   const { token } = useContext(AuthContext);
   const [gastos, setGastos] = useState([]);
-  const [selectedGasto, setSelectedGasto] = useState(null); // Gasto seleccionado para editar
+  const [selectedGasto, setSelectedGasto] = useState(null);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
-  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false); // Estado del modal de eliminación
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
 
   const parseJwt = (token) => {
     try {
@@ -38,23 +38,20 @@ export default function GastosList() {
     if (usuarioId) cargarGastos();
   }, [usuarioId, token]);
 
-  // Función para abrir el modal de edición con el gasto seleccionado
   const handleEditClick = (gasto) => {
     setSelectedGasto(gasto);
     setIsEditModalOpen(true);
   };
 
-  // Función para abrir el modal de eliminación
   const handleDeleteClick = (gasto) => {
     setSelectedGasto(gasto);
     setIsDeleteModalOpen(true);
   };
 
-  // Confirmar eliminación del gasto
   const confirmDelete = async () => {
     try {
-      await eliminarGasto(selectedGasto.id_gasto, token); // Llamada a la API para eliminar el gasto
-      cargarGastos(); // Refrescar la lista de gastos
+      await eliminarGasto(selectedGasto.id_gasto, token);
+      cargarGastos();
       setIsDeleteModalOpen(false);
       setSelectedGasto(null);
     } catch (error) {
@@ -63,24 +60,27 @@ export default function GastosList() {
   };
 
   return (
-    <div className="bg-white rounded-lg shadow-md p-6 max-w-md mx-auto">
+    <div className="bg-white rounded-lg shadow-md p-6 max-w-3xl mx-auto"> {/* max-w-3xl para mayor ancho */}
       <h2 className="text-lg font-semibold">Últimos gastos registrados</h2>
-      <p className="text-sm text-gray-500 mb-4">Check your last transactions</p>
+      <p className="text-sm text-gray-500 mb-4">Revisa tus gastos</p>
 
-      <div className="overflow-hidden border rounded-lg">
+      <div className="overflow-x-auto border rounded-lg">
         <table className="min-w-full bg-white">
           <thead>
             <tr className="border-b">
-              <th className="px-4 py-2 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">
+              <th className="w-1/6 px-4 py-2 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">
                 Gasto
               </th>
-              <th className="px-4 py-2 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">
+              <th className="w-2/6 px-4 py-2 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">
+                Descripción
+              </th>
+              <th className="w-1/6 px-4 py-2 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">
                 Fecha
               </th>
-              <th className="px-4 py-2 text-right text-xs font-semibold text-gray-500 uppercase tracking-wider">
+              <th className="w-1/6 px-4 py-2 text-right text-xs font-semibold text-gray-500 uppercase tracking-wider">
                 Cantidad
               </th>
-              <th className="px-4 py-2"></th>
+              <th className="w-1/12 px-4 py-2"></th>
             </tr>
           </thead>
           <tbody>
@@ -93,11 +93,14 @@ export default function GastosList() {
                   </span>
                 </td>
                 <td className="px-4 py-2 text-gray-500 text-sm">
+                  {gasto.descripcion || "Sin descripción"}
+                </td>
+                <td className="px-4 py-2 text-gray-500 text-sm">
                   {new Date(gasto.fecha).toLocaleDateString()}
                 </td>
                 <td
                   className={`px-4 py-2 text-right font-semibold ${
-                    gasto.monto < 0 ? "text-red-500" : "text-red-500"
+                    gasto.monto < 0 ? "text-red-500" : "text-green-500"
                   }`}
                 >
                   {gasto.monto < 0 ? `-${gasto.monto}` : `-${gasto.monto}`}
@@ -116,7 +119,6 @@ export default function GastosList() {
         </table>
       </div>
 
-      {/* Modal de edición */}
       {isEditModalOpen && selectedGasto && (
         <EditExpenseModal
           isOpen={isEditModalOpen}
@@ -126,7 +128,6 @@ export default function GastosList() {
         />
       )}
 
-      {/* Modal de confirmación de eliminación */}
       {isDeleteModalOpen && (
         <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50">
           <div className="bg-white rounded-lg shadow-lg w-80 p-6">

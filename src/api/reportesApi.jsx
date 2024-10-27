@@ -49,3 +49,14 @@ export const eliminarReporte = async (reporte_id, token) => {
     throw error;
   }
 };
+
+
+export const obtenerReportes = async () => {
+  try {
+    const response = await axios.get(`${import.meta.env.VITE_API_URL}/reportes`); // Asegúrate de usar la ruta correcta
+    return response.data;
+  } catch (error) {
+    console.error("Error al obtener los reportes:", error);
+    throw error;
+  }
+};

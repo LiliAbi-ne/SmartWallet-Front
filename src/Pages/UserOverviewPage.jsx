@@ -13,23 +13,19 @@ import {
   Tooltip,
   Legend,
 } from "recharts";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "../components/ui/Componentes/table";
-import { obtenerIngresoUsuario, actualizarIngreso } from "../api/usuariosApi";
 import { AuthContext } from "../context/AuthContext";
+import { obtenerIngresoUsuario, actualizarIngreso } from "../api/usuariosApi";
+import { obtenerGastosPorUsuario } from "../api/gastosApi";
+import { getIconForCategory } from "../utils/iconsUtils"; // Importa la función para los iconos
 
 export default function UserOverviewPage() {
   const { token } = useContext(AuthContext);
   const [isIncomeModalOpen, setIsIncomeModalOpen] = useState(false);
   const [income, setIncome] = useState("");
+  const [expenseData, setExpenseData] = useState([]);
+  const [expenseCategories, setExpenseCategories] = useState([]);
+  const [recentExpenses, setRecentExpenses] = useState([]);
 
-  // Extrae usuario_id del token
   const parseJwt = (token) => {
     try {
       const base64Url = token.split(".")[1];
@@ -46,17 +42,67 @@ export default function UserOverviewPage() {
     const fetchIncome = async () => {
       try {
         const userIncome = await obtenerIngresoUsuario(token, usuario_id);
-        if (userIncome === null) { // Verifica si el ingreso es realmente null
+        if (userIncome === null) {
           setIsIncomeModalOpen(true);
         } else {
           setIncome(userIncome);
-          setIsIncomeModalOpen(false); // Asegúrate de cerrar el modal si el ingreso es válido
+          setIsIncomeModalOpen(false);
         }
       } catch (error) {
         console.error("Error al obtener ingreso:", error);
       }
     };
-    if (usuario_id) fetchIncome();
+
+    const fetchExpenses = async () => {
+      try {
+        const expenses = await obtenerGastosPorUsuario(usuario_id, token);
+
+        // Ordena los gastos por fecha descendente para mostrar los últimos gastos primero
+        const sortedExpenses = expenses.sort(
+          (a, b) => new Date(b.fecha) - new Date(a.fecha)
+        );
+
+        // Configuración de datos para los gráficos
+        const groupedExpenses = sortedExpenses.reduce((acc, expense) => {
+          const categoriaId = expense.categoria_gasto_id;
+          const monto = parseFloat(expense.monto);
+          if (!acc[categoriaId]) {
+            acc[categoriaId] = {
+              nombre: expense.nombre_categoria,
+              monto: 0,
+            };
+          }
+          acc[categoriaId].monto += monto;
+          return acc;
+        }, {});
+
+        const categoriesData = Object.values(groupedExpenses)
+          .sort((a, b) => b.monto - a.monto)
+          .slice(0, 4)
+          .map((item) => ({
+            name: item.nombre,
+            amount: item.monto,
+          }));
+
+        const pieData = categoriesData.map((category) => ({
+          name: category.name,
+          value: category.amount,
+        }));
+
+        setExpenseCategories(categoriesData);
+        setExpenseData(pieData);
+
+        // Para la tabla de transacciones recientes, mostrando solo los 5 últimos gastos
+        setRecentExpenses(sortedExpenses.slice(0, 5));
+      } catch (error) {
+        console.error("Error al obtener gastos del usuario:", error);
+      }
+    };
+
+    if (usuario_id) {
+      fetchIncome();
+      fetchExpenses();
+    }
   }, [token, usuario_id]);
 
   const handleSaveIncome = async () => {
@@ -65,27 +111,12 @@ export default function UserOverviewPage() {
       return;
     }
     try {
-      await actualizarIngreso(token, usuario_id, parseFloat(income)); // Envía el ingreso correctamente
+      await actualizarIngreso(token, usuario_id, parseFloat(income));
       setIsIncomeModalOpen(false);
     } catch (error) {
       console.error("Error al guardar ingreso:", error);
     }
   };
-
-  // Datos de ejemplo para gráficos
-  const expenseData = [
-    { name: "Casa", value: 400 },
-    { name: "Transporte", value: 300 },
-    { name: "Dulces", value: 200 },
-    { name: "Shopping", value: 100 },
-  ];
-
-  const expenseCategories = [
-    { name: "Casa", amount: 400 },
-    { name: "Transporte", amount: 300 },
-    { name: "Dulces", amount: 200 },
-    { name: "Shopping", amount: 100 },
-  ];
 
   return (
     <div className="flex h-screen bg-gray-100">
@@ -96,8 +127,6 @@ export default function UserOverviewPage() {
           <h1 className="text-2xl font-bold">Resumen de Usuario</h1>
         </div>
 
-        {/* Modal de ingreso mensual */}
-
         {/* Gráficos */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
           <div className="bg-white p-4 shadow-md rounded-lg">
@@ -106,9 +135,21 @@ export default function UserOverviewPage() {
               <BarChart data={expenseCategories}>
                 <XAxis dataKey="name" />
                 <YAxis />
-                <Tooltip />
-                <Legend />
-                <Bar dataKey="amount" fill="#8884d8">
+                <Tooltip
+                  formatter={(value) => [`${value}`, "monto"]}
+                  labelFormatter={(label) => `Categoría: ${label}`}
+                />
+                <Legend
+                  payload={expenseCategories.map((item, index) => ({
+                    id: index,
+                    type: "square",
+                    value: item.name,
+                    color: ["#8b5cf6", "#3b82f6", "#22c55e", "#ef4444"][
+                      index % 4
+                    ],
+                  }))}
+                />
+                <Bar dataKey="amount" name="monto" fill="#8884d8">
                   {expenseCategories.map((entry, index) => (
                     <Cell
                       key={`cell-${index}`}
@@ -157,24 +198,51 @@ export default function UserOverviewPage() {
           <h2 className="text-lg font-semibold mb-4">
             Transacciones Recientes
           </h2>
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>Transacción</TableHead>
-                <TableHead>Fecha</TableHead>
-                <TableHead>Cantidad</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              <TableRow>
-                <TableCell>Netflix</TableCell>
-                <TableCell>2024/03/29</TableCell>
-                <TableCell className="text-red-500">-9.90</TableCell>
-              </TableRow>
-              {/* Añade más filas de transacciones aquí */}
-            </TableBody>
-          </Table>
+          <div className="overflow-x-auto">
+            <table className="min-w-full bg-white">
+              <thead>
+                <tr className="border-b">
+                  <th className="px-4 py-2 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">
+                    Categoría
+                  </th>
+                  <th className="px-4 py-2 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">
+                    Fecha
+                  </th>
+                  <th className="px-4 py-2 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">
+                    Descripción
+                  </th>
+                  <th className="px-4 py-2 text-right text-xs font-semibold text-gray-500 uppercase tracking-wider">
+                    Cantidad
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                {recentExpenses.map((gasto, index) => (
+                  <tr key={index} className="border-b hover:bg-gray-50">
+                    <td className="flex items-center px-4 py-2 space-x-2 text-gray-700 text-sm">
+                      <span>{getIconForCategory(gasto.nombre_categoria)}</span>
+                      <span>{gasto.nombre_categoria}</span>
+                    </td>
+                    <td className="px-4 py-2 text-gray-500 text-sm">
+                      {new Date(gasto.fecha).toLocaleDateString()}
+                    </td>
+                    <td className="px-4 py-2 text-gray-500 text-sm">
+                      {gasto.descripcion || "Sin descripción"}
+                    </td>
+                    <td
+                      className={`px-4 py-2 text-right font-semibold ${
+                        gasto.monto < 0 ? "text-red-500" : "text-red-500"
+                      }`}
+                    >
+                      {gasto.monto < 0 ? `-${gasto.monto}` : `-${gasto.monto}`}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         </div>
+
         {isIncomeModalOpen && (
           <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50 backdrop-blur-md">
             <div className="bg-white p-6 rounded-lg shadow-lg w-96 z-50">

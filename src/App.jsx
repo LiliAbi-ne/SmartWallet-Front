@@ -12,7 +12,7 @@ import EducationPage from "./Pages/EducationPage";
 import UserOverviewPage from "./Pages/UserOverviewPage";
 import AdminOverviewPage from "./Pages/AdminOverviewPage";
 import UserManagementPage from "./Pages/UserManagementPage";
-import AdminReportsPage from "./Pages/AdminReportsPage"; // Nueva importación
+import AdminReportsPage from "./Pages/AdminReportsPage";
 import ProtectedRoute from "../src/components/ui/Componentes/Protected/ProtectedRoute";
 import AboutSection from "./Pages/AboutSection";
 import EducationAdminPage from "./Pages/EducationAdminPage";
@@ -30,11 +30,11 @@ function App() {
         <Route path="/prices" element={<PricingTier />} />
         <Route path="/about-us" element={<AboutSection />} />
 
-        {/* Rutas protegidas */}
+        {/* Rutas protegidas para usuarios regulares */}
         <Route
           path="/goals"
           element={
-            <ProtectedRoute>
+            <ProtectedRoute requiredRole="usuario">
               <GoalsPage />
             </ProtectedRoute>
           }
@@ -42,19 +42,23 @@ function App() {
         <Route
           path="/expenses"
           element={
-            <ProtectedRoute>
+            <ProtectedRoute requiredRole="usuario">
               <ExpensesPage />
             </ProtectedRoute>
           }
         />
         <Route
           path="/reports"
-          element={<ReportsPage />}
+          element={
+            <ProtectedRoute requiredRole="usuario">
+              <ReportsPage />
+            </ProtectedRoute>
+          }
         />
         <Route
           path="/education"
           element={
-            <ProtectedRoute>
+            <ProtectedRoute requiredRole="usuario">
               <EducationPage />
             </ProtectedRoute>
           }
@@ -62,36 +66,53 @@ function App() {
         <Route
           path="/user-overview"
           element={
-            <ProtectedRoute>
+            <ProtectedRoute requiredRole="usuario">
               <UserOverviewPage />
             </ProtectedRoute>
           }
         />
         <Route
+          path="/user-configuration"
+          element={
+            <ProtectedRoute requiredRole="usuario">
+              <UserConfigurations />
+            </ProtectedRoute>
+          }
+        />
+
+        {/* Rutas protegidas para administradores */}
+        <Route
           path="/admin-overview"
-          element={<AdminOverviewPage />}
+          element={
+            <ProtectedRoute requiredRole="admin">
+              <AdminOverviewPage />
+            </ProtectedRoute>
+          }
         />
         <Route
           path="/user-management"
-          element={<UserManagementPage />}
+          element={
+            <ProtectedRoute requiredRole="admin">
+              <UserManagementPage />
+            </ProtectedRoute>
+          }
         />
         <Route
           path="/admin-reports"
-          element={<AdminReportsPage />}
+          element={
+            <ProtectedRoute requiredRole="admin">
+              <AdminReportsPage />
+            </ProtectedRoute>
+          }
         />
         <Route
           path="/admin-education"
-          element={<EducationAdminPage />}>
-
-        </Route>
-        <Route
-          path="/user-configuration"
-          element={<UserConfigurations />}>
-
-        </Route>
-
-
-
+          element={
+            <ProtectedRoute requiredRole="admin">
+              <EducationAdminPage />
+            </ProtectedRoute>
+          }
+        />
       </Routes>
     </Router>
   );
