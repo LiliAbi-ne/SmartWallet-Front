@@ -25,3 +25,31 @@ export const registerUsuario = async (usuarioData) => {
     throw error;
   }
 };
+
+
+export const obtenerIngresoUsuario = async (token, usuario_id) => {
+  try {
+    const response = await axios.get(
+      `${import.meta.env.VITE_API_URL}/ingresos/usuario/${usuario_id}`,
+      { headers: { Authorization: `Bearer ${token}` } }
+    );
+    return response.data.ingreso_mensual;
+  } catch (error) {
+    console.error("Error al obtener ingreso:", error);
+    throw error;
+  }
+};
+
+export const actualizarIngreso = async (token, usuario_id, ingresos) => {
+  try {
+    const response = await axios.put(
+      `${import.meta.env.VITE_API_URL}/ingresos/usuario/${usuario_id}`,
+      { ingresos },
+      { headers: { Authorization: `Bearer ${token}` } }
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Error al actualizar ingreso:", error);
+    throw error;
+  }
+};
