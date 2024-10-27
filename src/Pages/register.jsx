@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom"; // Para redirigir al usuario
+import { useNavigate, Link } from "react-router-dom"; // Para redirigir al usuario
 import { registerUsuario } from "../api/usuariosApi";
 import { motion } from "framer-motion";
 import Logo from "../assets/Logo.png"
@@ -84,14 +84,15 @@ export default function Register() {
             animate="visible"
             transition={{ delay: 0.3 }}
           >
-            <img
-              src={Logo}
-              alt="Logo de SmartWallet"
-              className="h-10 mb-4"
-            />
-            <h1 className="text-2xl font-bold text-gray-800">
-              Registrar cuenta
-            </h1>
+            <div className="flex justify-between font-bold">
+              <img src="src/assets/Logo.png" alt="Logo" className="h-10 mb-4" />
+              <h1 className="text-2xl font-bold text-gray-800">
+                Registrate
+              </h1>
+              <Link to="/" className="text-xl">
+                X
+              </Link>
+            </div>
           </motion.div>
           {error && <p className="text-red-500 mb-4">{error}</p>}
           <form onSubmit={handleSubmit} className="space-y-4">

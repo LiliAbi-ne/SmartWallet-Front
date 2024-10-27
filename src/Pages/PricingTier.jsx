@@ -5,11 +5,9 @@ import Navbar from '../components/ui/Componentes/Navbar'
 
 const PricingTier = ({ name, price, features, recommended }) => (
   <div className={`flex flex-col p-2 bg-white rounded-lg shadow-md ${recommended ? 'border-2 border-green-500' : ''}`}>
-    {recommended && (
-      <span className="px-3 py-1 text-sm text-white bg-green-500 rounded-full self-start mb-4">
-        Recomendados
-      </span>
-    )}
+
+
+
     <h3 className="text-2xl font-bold text-gray-900">{name}</h3>
     <div className="mt-4 text-green-600 text-5xl font-bold">${price}<span className="text-xl text-gray-500">/mo</span></div>
     <ul className="mt-6 space-y-4 flex-grow">
@@ -50,28 +48,29 @@ export default function Component() {
   const pricingData = [
     {
       name: 'Gratis',
-      monthlyPrice: 9.99,
+      monthlyPrice: 0,
       annualPrice: 99.99,
       features: [
-        { text: 'Basic financial tracking', included: true },
-        { text: 'Up to 2 bank accounts', included: true },
-        { text: 'Monthly reports', included: true },
-        { text: 'Customer support', included: true },
-        { text: 'Investment tracking', included: false },
-        { text: 'Tax preparation', included: false },
+        { text: 'Seguimiento financiero básico', included: true },
+        { text: 'Reportes mensuales', included: true },
+        { text: 'Soporte al cliente', included: true },
+        { text: 'Educación financiera', included: true },
+        { text: 'Escaner de tickets', included: false },
+        { text: 'Libre de anuncios', included: false },
+
       ],
     },
     {
       name: 'Premium',
-      monthlyPrice: 19.99,
+      monthlyPrice: 49.99,
       annualPrice: 199.99,
       features: [
-        { text: 'Advanced financial tracking', included: true },
-        { text: 'Unlimited bank accounts', included: true },
-        { text: 'Weekly reports', included: true },
-        { text: 'Priority customer support', included: true },
-        { text: 'Investment tracking', included: true },
-        { text: 'Tax preparation', included: false },
+        { text: 'Seguimiento financiero básico', included: true },
+        { text: 'Reportes mensuales', included: true },
+        { text: 'Soporte al cliente', included: true },
+        { text: 'Educación financiera', included: true },
+        { text: 'Escaner de tickets', included: true },
+        { text: 'Libre de anuncios', included: true },
       ],
       recommended: true,
     }
@@ -80,26 +79,43 @@ export default function Component() {
   return (
     <div>
       <Navbar />
-      <div className="min-h-screen bg-gray-100 py-12 px-4 sm:px-6 lg:px-8">
+      <div className="min-h-screen py-12 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto">
           <div className="text-center">
-            <h2 className="text-3xl font-extrabold text-gray-900 sm:text-4xl">
+            <h2 className="text-4xl font-bold text-gray-800 sm:text-5xl">
               Escoge el plan adecuado para ti
             </h2>
-            <p className="mt-4 text-xl text-gray-600">
+            <p className="mt-4 text-lg text-gray-500">
               Simple, transparente y justo para que tus ahorros crezcan.
             </p>
           </div>
 
-          <div className="mt-12 space-y-4 sm:mt-16 sm:space-y-0 sm:grid sm:grid-cols-2 sm:gap-6 lg:max-w-4xl lg:mx-auto xl:max-w-none xl:mx-0 xl:grid-cols-2">
+          <div className="mt-12 space-y-4 sm:mt-16 sm:space-y-0 sm:grid sm:grid-cols-2 sm:gap-10 lg:max-w-4xl lg:mx-auto xl:max-w-none xl:mx-0 xl:grid-cols-2">
             {pricingData.map((tier, index) => (
-              <PricingTier
+              <div
                 key={index}
-                name={tier.name}
-                price={isAnnual ? tier.annualPrice.toFixed(2) : tier.monthlyPrice.toFixed(2)}
-                features={tier.features}
-                recommended={tier.recommended}
-              />
+                className={`relative rounded-lg shadow-lg border ${tier.recommended
+                  ? 'border-green-500 bg-white'
+                  : 'border-gray-300 bg-white'
+                  } p-6 transition-transform duration-200 hover:scale-105`}
+              >
+                {tier.recommended && (
+                  <span className="absolute top-4 right-4 bg-green-100 text-green-800 text-xs font-semibold px-2 py-1 rounded-full">
+                    Recomendado
+                  </span>
+                )}
+                <PricingTier
+                  name={tier.name}
+                  price={
+                    isAnnual
+                      ? tier.annualPrice.toFixed(2)
+                      : tier.monthlyPrice.toFixed(2)
+                  }
+                  features={tier.features}
+                  recommended={tier.recommended}
+                />
+
+              </div>
             ))}
           </div>
         </div>

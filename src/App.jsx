@@ -12,6 +12,7 @@ import EducationPage from "./Pages/EducationPage";
 import UserOverviewPage from "./Pages/UserOverviewPage";
 import AdminOverviewPage from "./Pages/AdminOverviewPage";
 import ProtectedRoute from "../src/components/ui/Componentes/Protected/ProtectedRoute"; // Importa ProtectedRoute
+import AboutSection from "./Pages/AboutSection"
 
 function App() {
   return (
@@ -23,6 +24,7 @@ function App() {
         <Route path="/register" element={<Register />} />
         <Route path="/how-it-works" element={<HowItWorks />} />
         <Route path="/prices" element={<PricingTier />} />
+        <Route path="/about-us" element={<AboutSection />} />
 
         {/* Rutas protegidas */}
         <Route

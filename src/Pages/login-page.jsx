@@ -41,7 +41,7 @@ export default function Login() {
             alt="Concepto de ahorro inteligente"
             className="w-full h-full object-cover"
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-green-600/50 to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-t from-green-200/50 to-transparent" />
           <motion.div
             className="absolute bottom-0 left-0 p-8 text-white"
             initial="hidden"
@@ -69,7 +69,7 @@ export default function Login() {
             transition={{ delay: 0.3 }}
           >
             <div className="flex justify-between font-bold">
-              <img src="../img/Logo.jpg" className="h-10 mb-4" />
+              <img src="src/assets/Logo.png" alt="Logo" className="h-10 mb-4 " />
               <h1 className="text-2xl font-bold text-gray-800">
                 Iniciar sesión
               </h1>
