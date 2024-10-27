@@ -66,6 +66,18 @@ export const obtenerUsuarios = async () => {
   }
 };
 
+export const obtenerInfoUsuarios = async () => {
+  try {
+    const response = await axios.get(`${import.meta.env.VITE_API_URL}/usuarios/info`);
+    return response.data;
+  } catch (error) {
+    console.error("Error al obtener usuarios:", error);
+    throw error;
+  }
+};
+
+
+
 
 export const eliminarUsuario = async (usuarioId) => {
   try {

@@ -1,5 +1,3 @@
-// src/components/ui/Componentes/AdminCard.jsx
-
 import PropTypes from 'prop-types';
 
 export function AdminCard({
@@ -9,6 +7,7 @@ export function AdminCard({
   icon: Icon,
   color = "bg-gray-100",
   textColor = "text-black",
+  loading = false, // Nuevo prop para controlar el estado de carga
   children,
 }) {
   return (
@@ -17,8 +16,10 @@ export function AdminCard({
         <h3 className="text-lg font-semibold">{title}</h3>
         {Icon && <Icon className="h-6 w-6" />}
       </div>
-      <div className="text-3xl font-bold mb-2">{value}</div>
-      {percentage !== undefined && (
+      <div className="text-3xl font-bold mb-2">
+        {loading ? "Cargando..." : value} {/* Mostrar "Cargando..." si está en estado de carga */}
+      </div>
+      {percentage !== undefined && !loading && ( /* Ocultar el porcentaje mientras carga */
         <div className={`text-sm ${percentage > 0 ? 'text-green-500' : 'text-red-500'}`}>
           {percentage > 0 ? `+${percentage}%` : `${percentage}%`}
         </div>
@@ -35,5 +36,6 @@ AdminCard.propTypes = {
   icon: PropTypes.elementType,
   color: PropTypes.string,
   textColor: PropTypes.string,
+  loading: PropTypes.bool, // Propiedad para indicar si está en estado de carga
   children: PropTypes.node,
 };
