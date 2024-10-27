@@ -15,15 +15,23 @@ export default function SidebarAdmin() {
           <MenuItem
             icon={<FileText size={20} />}
             label="Descripción"
-            to={"/"}
+            to="/admin-overview" // Enlace a la página AdminOverviewPage.jsx
           />
-          <MenuItem icon={<Users size={20} />} label="Usuarios" to={"/"} />
+          <MenuItem
+            icon={<Users size={20} />}
+            label="Usuarios"
+            to="/user-management" // Enlace a la página UserManagementPage.jsx
+          />
           <MenuItem
             icon={<GraduationCap size={20} />}
             label="Educación"
-            to={"/"}
+            to="/education-admin" // Enlace a la página EducationAdminPage.jsx
           />
-          <MenuItem icon={<BarChart2 size={20} />} label="Reportes" to={"/"} />
+          <MenuItem
+            icon={<BarChart2 size={20} />}
+            label="Reportes"
+            to="/admin-reports" // Enlace a la página AdminReportsPage.jsx
+          />
         </ul>
       </nav>
       <div className="p-4 border-t">

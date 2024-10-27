@@ -58,17 +58,17 @@ function App() {
         <Route
           path="/education-admin"
           element={
-            <ProtectedRoute>
+            
               <EducationAdminPage />
-            </ProtectedRoute>
+           
           }
         />
         <Route
           path="/user-overview"
           element={
-            <ProtectedRoute>
+            
               <UserOverviewPage />
-            </ProtectedRoute>
+          
           }
         />
         <Route path="/admin-overview" element={<AdminOverviewPage />} />
