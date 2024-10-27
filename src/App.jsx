@@ -15,6 +15,7 @@ import UserManagementPage from "./Pages/UserManagementPage";
 import AdminReportsPage from "./Pages/AdminReportsPage"; // Nueva importación
 import ProtectedRoute from "../src/components/ui/Componentes/Protected/ProtectedRoute";
 import AboutSection from "./Pages/AboutSection";
+import EducationAdminPage from "./Pages/EducationAdminPage";
 
 function App() {
   return (
@@ -77,6 +78,13 @@ function App() {
           path="/admin-reports"
           element={<AdminReportsPage />}
         />
+        <Route
+          path="/admin-education"
+          element={<EducationAdminPage />}>
+
+        </Route>
+
+
       </Routes>
     </Router>
   );
