@@ -4,10 +4,20 @@ import { motion } from 'framer-motion';
 
 export default function EditModal({ isOpen, onClose, section }) {
     const [value, setValue] = useState("");
+    const [confirmValue, setConfirmValue] = useState("");
+    const [error, setError] = useState("");
 
     const handleSave = () => {
-        // Aquí puedes agregar la lógica para guardar los cambios
+        // Verificar que ambos valores coincidan
+        if (value !== confirmValue) {
+            setError("Los valores no coinciden. Por favor, verifica e intenta de nuevo.");
+            return;
+        }
+
+        // Resetear el error y cerrar el modal
+        setError("");
         onClose();
+        // Aquí puedes agregar la lógica para guardar los cambios en la API
     };
 
     if (!isOpen) return null;
@@ -35,6 +45,16 @@ export default function EditModal({ isOpen, onClose, section }) {
                         onChange={(e) => setValue(e.target.value)}
                     />
                 </div>
+                <div className="mt-4">
+                    <label className="block text-gray-600 mb-2">Confirmar {section}</label>
+                    <input
+                        type="text"
+                        className="w-full border border-gray-300 p-2 rounded-md focus:border-green-500"
+                        value={confirmValue}
+                        onChange={(e) => setConfirmValue(e.target.value)}
+                    />
+                </div>
+                {error && <p className="text-red-500 mt-2">{error}</p>}
                 <div className="mt-4 flex justify-end space-x-2">
                     <button
                         onClick={onClose}

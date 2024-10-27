@@ -2,22 +2,74 @@ import Sidebar from "../components/ui/Componentes/Sidebar";
 import Header from "../components/ui/Componentes/Header";
 import UserProfileCard from "../components/ui/Componentes/UserProfileCard";
 import InformationCard from "../components/ui/Componentes/InformationCard";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import EditModal from "../components/ui/Componentes/Modales/EditUserModal";
 import PaymentModal from "../components/ui/Componentes/Modales/PaymentModal";
+import { obtenerPerfilUsuario, actualizarPerfilUsuario } from "../api/usuariosApi";
 
-export default function UserConfigurations() {
+
+export default function UserConfigurations({ token, usuario_id }) {
     const [isEditModalOpen, setEditModalOpen] = useState(false);
     const [isPaymentModalOpen, setPaymentModalOpen] = useState(false);
     const [selectedSection, setSelectedSection] = useState(null);
+    const [editValue, setEditValue] = useState("");
+    const [userProfile, setUserProfile] = useState({
+        nombre: "",
+        email: "",
+        contraseña: "",
+        preferencias: { notificaciones: "", privacidad: "", cuenta: "Básica" },
+    });
 
-    const openEditModal = (section) => {
+    useEffect(() => {
+        const fetchUserProfile = async () => {
+            try {
+                const perfilData = await obtenerPerfilUsuario(token, usuario_id);
+                setUserProfile({
+                    nombre: perfilData.nombre,
+                    email: perfilData.email,
+                    contraseña: "*****",
+                    preferencias: perfilData.preferencias,
+                });
+            } catch (error) {
+                console.error("Error al obtener perfil de usuario:", error);
+            }
+        };
+        fetchUserProfile();
+    }, [token, usuario_id]);
+
+    const openEditModal = (section, value) => {
         setSelectedSection(section);
+        setEditValue(value);
         setEditModalOpen(true);
     };
 
-    const handleAccountTypeChange = () => {
-        setPaymentModalOpen(true);
+    // Maneja el cambio de tipo de cuenta y abre el modal de pago si se selecciona "Premium"
+    const handleAccountTypeChange = (newAccountType) => {
+        if (newAccountType === "Premium") {
+            setPaymentModalOpen(true);
+        } else {
+            actualizarPerfilUsuario(token, usuario_id, { cuenta: "Básica" })
+                .then(() => {
+                    setUserProfile((prevState) => ({
+                        ...prevState,
+                        preferencias: { ...prevState.preferencias, cuenta: "Básica" },
+                    }));
+                })
+                .catch((error) => console.error("Error al actualizar tipo de cuenta:", error));
+        }
+    };
+
+    const handleSaveChanges = async (newData) => {
+        try {
+            await actualizarPerfilUsuario(token, usuario_id, newData);
+            setUserProfile((prevProfile) => ({
+                ...prevProfile,
+                [selectedSection]: newData[selectedSection] || prevProfile[selectedSection],
+            }));
+            setEditModalOpen(false);
+        } catch (error) {
+            console.error("Error al actualizar perfil del usuario:", error);
+        }
     };
 
     return (
@@ -27,10 +79,10 @@ export default function UserConfigurations() {
                 <Header />
                 <div className="max-w-4xl mx-auto">
                     <UserProfileCard
-                        name="Juan David Quiñónez"
+                        name={userProfile.nombre}
                         profileImage="https://via.placeholder.com/150"
-                        backgroundImage="https://via.placeholder.com/800x200"
-                        onEdit={openEditModal}
+                        backgroundImage="https://idc.brightspotcdn.com/dims4/default/adff828/2147483647/resize/800x%3E/quality/90/?url=https%3A%2F%2Fidc.brightspotcdn.com%2Feinfluss%2Fmedia%2F2017%2F02%2F10%2F%2Fahorro.jpg"
+                        onEdit={() => openEditModal("Perfil", userProfile.nombre)}
                     />
 
                     <h2 className="text-2xl font-bold text-green-700 mt-6">Configuración de cuenta</h2>
@@ -42,45 +94,35 @@ export default function UserConfigurations() {
                         <InformationCard
                             title="Información de contacto"
                             details={[
-                                { label: "Correo", value: "correo@example.com" },
-                                { label: "Teléfono", value: "(555) 123-4567" }
+                                { label: "Correo", value: userProfile.email },
+                                { label: "Contraseña", value: userProfile.contraseña }
                             ]}
-                            onEdit={openEditModal}
-                        />
-                        <InformationCard
-                            title="Estudios"
-                            details={[
-                                { label: "Universidad Nacional de Colombia", value: "Estadística" }
-                            ]}
-                            onEdit={openEditModal}
-                        />
-                        <InformationCard
-                            title="Información laboral"
-                            details={[
-                                { label: "Trabajo actual", value: "Desarrollador Freelance" },
-                                { label: "Empresa", value: "ABC Corp." }
-                            ]}
-                            onEdit={openEditModal}
+                            onEdit={(label) => openEditModal(label, userProfile[label.toLowerCase()])}
                         />
                         <InformationCard
                             title="Preferencias de cuenta"
                             details={[
-                                { label: "Notificaciones", value: "Activadas" },
-                                { label: "Privacidad", value: "Pública" }
+                                { label: "Notificaciones", value: userProfile.preferencias.notificaciones },
+                                {
+                                    label: "Tipo de suscripción",
+                                    value: userProfile.preferencias.cuenta,
+                                    options: ["Básica", "Premium"],
+                                    onChange: handleAccountTypeChange
+                                }
                             ]}
-                            onEdit={() => handleAccountTypeChange()}
+                            onEdit={(label) => openEditModal(label, userProfile.preferencias[label.toLowerCase()])}
                         />
                     </div>
                 </div>
 
-                {/* Modal de edición */}
                 <EditModal
                     isOpen={isEditModalOpen}
                     onClose={() => setEditModalOpen(false)}
                     section={selectedSection}
+                    initialValue={editValue}
+                    onSave={handleSaveChanges}
                 />
 
-                {/* Modal de pago para cambio a cuenta premium */}
                 <PaymentModal
                     isOpen={isPaymentModalOpen}
                     onClose={() => setPaymentModalOpen(false)}
