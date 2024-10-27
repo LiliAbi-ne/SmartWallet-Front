@@ -16,7 +16,7 @@ import {
 import { AuthContext } from "../context/AuthContext";
 import { obtenerIngresoUsuario, actualizarIngreso } from "../api/usuariosApi";
 import { obtenerGastosPorUsuario } from "../api/gastosApi";
-import { getIconForCategory } from "../utils/iconsUtils"; // Importa la función para los iconos
+import { getIconForCategory } from "../utils/iconsUtils";
 
 export default function UserOverviewPage() {
   const { token } = useContext(AuthContext);
@@ -57,12 +57,10 @@ export default function UserOverviewPage() {
       try {
         const expenses = await obtenerGastosPorUsuario(usuario_id, token);
 
-        // Ordena los gastos por fecha descendente para mostrar los últimos gastos primero
         const sortedExpenses = expenses.sort(
           (a, b) => new Date(b.fecha) - new Date(a.fecha)
         );
 
-        // Configuración de datos para los gráficos
         const groupedExpenses = sortedExpenses.reduce((acc, expense) => {
           const categoriaId = expense.categoria_gasto_id;
           const monto = parseFloat(expense.monto);
@@ -92,8 +90,8 @@ export default function UserOverviewPage() {
         setExpenseCategories(categoriesData);
         setExpenseData(pieData);
 
-        // Para la tabla de transacciones recientes, mostrando solo los 5 últimos gastos
-        setRecentExpenses(sortedExpenses.slice(0, 5));
+        // Mostrar solo los 3 últimos gastos en la tabla de transacciones recientes
+        setRecentExpenses(sortedExpenses.slice(0, 3));
       } catch (error) {
         console.error("Error al obtener gastos del usuario:", error);
       }
@@ -196,7 +194,7 @@ export default function UserOverviewPage() {
         {/* Tabla de Transacciones Recientes */}
         <div className="bg-white p-4 shadow-md rounded-lg">
           <h2 className="text-lg font-semibold mb-4">
-            Transacciones Recientes
+            Gastos Recientes
           </h2>
           <div className="overflow-x-auto">
             <table className="min-w-full bg-white">
@@ -219,18 +217,18 @@ export default function UserOverviewPage() {
               <tbody>
                 {recentExpenses.map((gasto, index) => (
                   <tr key={index} className="border-b hover:bg-gray-50">
-                    <td className="flex items-center px-4 py-2 space-x-2 text-gray-700 text-sm">
+                    <td className="flex items-center px-4 py-0 space-x-2 text-gray-700 text-sm">
                       <span>{getIconForCategory(gasto.nombre_categoria)}</span>
                       <span>{gasto.nombre_categoria}</span>
                     </td>
-                    <td className="px-4 py-2 text-gray-500 text-sm">
+                    <td className="px-4 py-0 text-gray-500 text-sm">
                       {new Date(gasto.fecha).toLocaleDateString()}
                     </td>
-                    <td className="px-4 py-2 text-gray-500 text-sm">
+                    <td className="px-4 py-0 text-gray-500 text-sm">
                       {gasto.descripcion || "Sin descripción"}
                     </td>
                     <td
-                      className={`px-4 py-2 text-right font-semibold ${
+                      className={`px-4 py-0 text-right font-semibold ${
                         gasto.monto < 0 ? "text-red-500" : "text-red-500"
                       }`}
                     >

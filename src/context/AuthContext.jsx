@@ -1,10 +1,11 @@
+// AuthContext.jsx
 import { createContext, useState } from 'react';
 import { saveToken, getToken, removeToken } from '../utils/auth';
 import PropTypes from 'prop-types';
 
 export const AuthContext = createContext();
 
-// Mueve esta función arriba para que esté disponible antes de usarla
+// Función para extraer el rol del usuario del token
 const extractUserRole = (token) => {
   try {
     const payloadBase64 = token.split('.')[1];
@@ -26,7 +27,7 @@ export const AuthProvider = ({ children }) => {
     setToken(newToken);
     setIsAuthenticated(true);
 
-    // Decodifica el rol del usuario manualmente
+    // Decodifica el rol del usuario
     const role = extractUserRole(newToken);
     setUserRole(role);
   };
