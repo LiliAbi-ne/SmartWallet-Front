@@ -1,4 +1,4 @@
-import { FileText, GraduationCap, BarChart2, User, Users, CircleDollarSign } from "lucide-react";
+import { FileText, GraduationCap, BarChart2, User, Users } from "lucide-react";
 import PropTypes from "prop-types";
 import Logo from "../../../assets/Logo.png";
 import { Link } from "react-router-dom";
@@ -17,14 +17,33 @@ export default function SidebarAdmin() {
             label="Descripción"
             to={"/admin-overview"}
           />
-          <MenuItem icon={<Users size={20} />} label="Usuarios" to={"/user-management"} />
+          <MenuItem
+            icon={<Users size={20} />}
+            label="Usuarios"
+            to={"/user-management"}
+          />
           <MenuItem
             icon={<GraduationCap size={20} />}
             label="Educación"
             to={"/admin-education"}
           />
-          <MenuItem icon={<BarChart2 size={20} />} label="Reportes" to={"/admin-reports"} />
-          <MenuItem icon={<CircleDollarSign size={20} />} label="Categoría Gastos" to={"/expense-categories"} /> {/* Nueva categoría */}
+          <MenuItem
+            icon={<BarChart2 size={20} />}
+            label="Reportes"
+            to={"/admin-reports"}
+          />
+          <MenuItem
+            icon={<FileText size={20} />}
+            label="Categoría Gastos"
+            to={"/expense-categories"}
+          />{" "}
+          {/* Nueva categoría */}
+          <MenuItem
+            icon={<FileText size={20} />}
+            label="Categoría Metas"
+            to={"/goals-management"}
+          />{" "}
+          {/* Nueva categoría para metas */}
         </ul>
       </nav>
       <div className="p-4 border-t">
