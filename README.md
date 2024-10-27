@@ -28,3 +28,4 @@ Presupuestos
 
 Instalar para ver graficos 
 npm install recharts
+sdasdasdas
