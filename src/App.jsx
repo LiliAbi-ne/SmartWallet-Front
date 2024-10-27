@@ -18,6 +18,7 @@ import AboutSection from "./Pages/AboutSection";
 import EducationAdminPage from "./Pages/EducationAdminPage";
 import UserConfigurations from "./Pages/UserConfigurations";
 import ExpenseCategories from "./Pages/ExpenseCategories"; // Nueva importación
+import GoalsManagement from "./Pages/GoalsManagement"; // Nueva importación para la gestión de metas
 
 function App() {
   return (
@@ -33,8 +34,14 @@ function App() {
         
         {/* Ruta para la gestión de categorías de gastos */}
         <Route
-          path="/expense-categories" // Nueva ruta
+          path="/expense-categories" // Ruta para la gestión de categorías
           element={<ExpenseCategories />}
+        />
+
+        {/* Ruta para la gestión de metas */}
+        <Route
+          path="/goals-management" // Nueva ruta para la gestión de metas
+          element={<GoalsManagement />}
         />
 
         {/* Rutas protegidas para usuarios regulares */}
