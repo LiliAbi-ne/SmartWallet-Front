@@ -17,6 +17,7 @@ import ProtectedRoute from "../src/components/ui/Componentes/Protected/Protected
 import AboutSection from "./Pages/AboutSection";
 import EducationAdminPage from "./Pages/EducationAdminPage";
 import UserConfigurations from "./Pages/UserConfigurations";
+import ExpenseCategories from "./Pages/ExpenseCategories"; // Nueva importación
 
 function App() {
   return (
@@ -29,6 +30,12 @@ function App() {
         <Route path="/how-it-works" element={<HowItWorks />} />
         <Route path="/prices" element={<PricingTier />} />
         <Route path="/about-us" element={<AboutSection />} />
+        
+        {/* Ruta para la gestión de categorías de gastos */}
+        <Route
+          path="/expense-categories" // Nueva ruta
+          element={<ExpenseCategories />}
+        />
 
         {/* Rutas protegidas para usuarios regulares */}
         <Route
@@ -41,11 +48,7 @@ function App() {
         />
         <Route
           path="/expenses"
-          element={
-            <ProtectedRoute requiredRole="usuario">
-              <ExpensesPage />
-            </ProtectedRoute>
-          }
+          element={<ExpensesPage />}
         />
         <Route
           path="/reports"
@@ -81,14 +84,7 @@ function App() {
         />
 
         {/* Rutas protegidas para administradores */}
-        <Route
-          path="/admin-overview"
-          element={
-            <ProtectedRoute requiredRole="admin">
-              <AdminOverviewPage />
-            </ProtectedRoute>
-          }
-        />
+        <Route path="/admin-overview" element={<AdminOverviewPage />} />
         <Route
           path="/user-management"
           element={

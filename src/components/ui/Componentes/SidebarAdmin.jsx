@@ -24,6 +24,7 @@ export default function SidebarAdmin() {
             to={"/admin-education"}
           />
           <MenuItem icon={<BarChart2 size={20} />} label="Reportes" to={"/admin-reports"} />
+          <MenuItem icon={<FileText size={20} />} label="Categoría Gastos" to={"/expense-categories"} /> {/* Nueva categoría */}
         </ul>
       </nav>
       <div className="p-4 border-t">
