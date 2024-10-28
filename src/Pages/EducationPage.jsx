@@ -1,4 +1,3 @@
-import { Button } from "../components/ui/button";
 import ScrollArea from "../components/ui/Componentes/scroll-area";
 import Header from "../components/ui/Componentes/Header";
 import Sidebar from "../components/ui/Componentes/Sidebar";
