@@ -17,8 +17,8 @@ import ProtectedRoute from "../src/components/ui/Componentes/Protected/Protected
 import AboutSection from "./Pages/AboutSection";
 import EducationAdminPage from "./Pages/EducationAdminPage";
 import UserConfigurations from "./Pages/UserConfigurations";
-import ExpenseCategories from "./Pages/ExpenseCategories";
-import GoalsManagement from "./Pages/GoalsManagement";
+import ExpenseCategories from "./Pages/ExpenseCategories"; // Nueva importación
+import GoalsManagement from "./Pages/GoalsManagement"; // Nueva importación para la gestión de metas
 
 function App() {
   return (
@@ -31,25 +31,18 @@ function App() {
         <Route path="/how-it-works" element={<HowItWorks />} />
         <Route path="/prices" element={<PricingTier />} />
         <Route path="/about-us" element={<AboutSection />} />
+        {/* Ruta para la gestión de categorías de gastos */}
+        <Route
+          path="/expense-categories" // Ruta para la gestión de categorías
+          element={<ExpenseCategories />}
+        />
 
-        {/* Rutas protegidas para administradores */}
+        {/* Ruta para la gestión de metas */}
         <Route
-          path="/expense-categories"
-          element={
-            <ProtectedRoute requiredRole="admin">
-              <ExpenseCategories />
-            </ProtectedRoute>
-          }
+          path="/goals-management" // Nueva ruta para la gestión de metas
+          element={<GoalsManagement />}
         />
-        <Route
-          path="/goals-management"
-          element={
-            <ProtectedRoute requiredRole="admin">
-              <GoalsManagement />
-            </ProtectedRoute>
-          }
-        />
-        
+
         {/* Rutas protegidas para usuarios regulares */}
         <Route
           path="/goals"
@@ -61,11 +54,7 @@ function App() {
         />
         <Route
           path="/expenses"
-          element={
-            <ProtectedRoute requiredRole="usuario">
-              <ExpensesPage />
-            </ProtectedRoute>
-          }
+          element={<ExpensesPage />}
         />
         <Route
           path="/reports"
@@ -100,15 +89,8 @@ function App() {
           }
         />
 
-        {/* Rutas protegidas para administradores adicionales */}
-        <Route
-          path="/admin-overview"
-          element={
-            <ProtectedRoute requiredRole="admin">
-              <AdminOverviewPage />
-            </ProtectedRoute>
-          }
-        />
+        {/* Rutas protegidas para administradores */}
+        <Route path="/admin-overview" element={<AdminOverviewPage />} />
         <Route
           path="/user-management"
           element={
