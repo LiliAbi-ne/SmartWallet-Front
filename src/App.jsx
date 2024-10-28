@@ -31,7 +31,6 @@ function App() {
         <Route path="/how-it-works" element={<HowItWorks />} />
         <Route path="/prices" element={<PricingTier />} />
         <Route path="/about-us" element={<AboutSection />} />
-        
         {/* Ruta para la gestión de categorías de gastos */}
         <Route
           path="/expense-categories" // Ruta para la gestión de categorías

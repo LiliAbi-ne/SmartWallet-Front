@@ -2,6 +2,7 @@ import Sidebar from "../components/ui/Componentes/Sidebar";
 import Header from "../components/ui/Componentes/Header";
 import UserProfileCard from "../components/ui/Componentes/UserProfileCard";
 import InformationCard from "../components/ui/Componentes/InformationCard";
+import AccountTypeSelect from "../components/ui/Componentes/AccountTypeSelect";
 import { useState } from "react";
 import EditModal from "../components/ui/Componentes/Modales/EditUserModal";
 import PaymentModal from "../components/ui/Componentes/Modales/PaymentModal";
@@ -18,8 +19,6 @@ export default function UserConfigurations() {
         email: "juan.perez@example.com",
         contraseña: "*****",
         preferencias: {
-            notificaciones: "Activadas",
-            privacidad: "Pública",
             cuenta: "Básica",
         },
     });
@@ -30,7 +29,6 @@ export default function UserConfigurations() {
         setEditModalOpen(true);
     };
 
-    // Manejador para el cambio de tipo de cuenta
     const handleAccountTypeChange = (newAccountType) => {
         if (newAccountType === "Premium") {
             setPaymentModalOpen(true);
@@ -78,17 +76,18 @@ export default function UserConfigurations() {
                             onEdit={(label) => openEditModal(label, userProfile[label.toLowerCase()])}
                         />
                         <InformationCard
-                            title="Preferencias de cuenta"
+                            title="Tipo de suscripción"
                             details={[
-                                { label: "Notificaciones", value: userProfile.preferencias.notificaciones },
                                 {
-                                    label: "Tipo de suscripción",
-                                    value: userProfile.preferencias.cuenta,
-                                    options: ["Básica", "Premium"],
-                                    onChange: handleAccountTypeChange
+                                    label: "Cuenta",
+                                    value: (
+                                        <AccountTypeSelect
+                                            currentAccountType={userProfile.preferencias.cuenta}
+                                            onChangeAccountType={handleAccountTypeChange}
+                                        />
+                                    ),
                                 }
                             ]}
-                            onEdit={(label) => openEditModal(label, userProfile.preferencias[label.toLowerCase()])}
                         />
                     </div>
                 </div>
