@@ -1,17 +1,16 @@
 import { useState, useEffect, useContext } from "react";
 import { AuthContext } from "../../../context/AuthContext";
-import { obtenerGastosPorUsuario, eliminarGasto } from "../../../api/gastosApi";
-import { getIconForCategory } from "../../../utils/iconsUtils";
+import { obtenerRecordatoriosPorUsuario, eliminarRecordatorio } from "../../../api/recordatoriosApi";
 import { Edit, Trash2 } from "lucide-react";
-import EditExpenseModal from "./Modales/EditExpenseModal";
+import EditReminderModal from "./Modales/EditReminderModal"; // Modal para editar recordatorio
 import PropTypes from "prop-types";
 
-export default function GastosList({ refreshExpenses }) {
+export default function RemindersList({ refreshReminders }) {
   const { token } = useContext(AuthContext);
-  const [gastos, setGastos] = useState([]);
+  const [recordatorios, setRecordatorios] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 8;
-  const [selectedGasto, setSelectedGasto] = useState(null);
+  const [selectedRecordatorio, setSelectedRecordatorio] = useState(null);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
 
@@ -27,103 +26,80 @@ export default function GastosList({ refreshExpenses }) {
 
   const usuarioId = parseJwt(token)?.id;
 
-  const cargarGastos = async () => {
+  const cargarRecordatorios = async () => {
     try {
-      const gastosUsuario = await obtenerGastosPorUsuario(usuarioId, token);
-      const sortedGastos = gastosUsuario
-        .map(gasto => ({ ...gasto, monto: parseFloat(gasto.monto) })) // Convertir `monto` a número
-        .sort((a, b) => new Date(b.fecha) - new Date(a.fecha)); // Ordenar por fecha (más reciente primero)
-      setGastos(sortedGastos);
+      const recordatoriosUsuario = await obtenerRecordatoriosPorUsuario(usuarioId, token);
+      setRecordatorios(recordatoriosUsuario);
     } catch (error) {
-      console.error("Error al cargar los gastos:", error);
+      console.error("Error al cargar los recordatorios:", error);
     }
   };
-  
 
   useEffect(() => {
-    if (usuarioId) cargarGastos();
-  }, [usuarioId, token, refreshExpenses]); // Dependencia refreshExpenses para recargar al agregar
+    if (usuarioId) cargarRecordatorios();
+  }, [usuarioId, token, refreshReminders]);
 
-  const handleEditClick = (gasto) => {
-    setSelectedGasto(gasto);
+  const handleEditClick = (recordatorio) => {
+    setSelectedRecordatorio(recordatorio);
     setIsEditModalOpen(true);
   };
 
-  const handleDeleteClick = (gasto) => {
-    setSelectedGasto(gasto);
+  const handleDeleteClick = (recordatorio) => {
+    setSelectedRecordatorio(recordatorio);
     setIsDeleteModalOpen(true);
   };
 
   const confirmDelete = async () => {
     try {
-      await eliminarGasto(selectedGasto.id_gasto, token);
-      cargarGastos(); // Recargar lista después de eliminar
+      await eliminarRecordatorio(selectedRecordatorio.recordatorio_id, token);
+      cargarRecordatorios(); // Recargar lista después de eliminar
       setIsDeleteModalOpen(false);
-      setSelectedGasto(null);
+      setSelectedRecordatorio(null);
     } catch (error) {
-      console.error("Error al eliminar el gasto:", error);
+      console.error("Error al eliminar el recordatorio:", error);
     }
   };
 
-  // Calcular el índice de gastos que se muestran en la página actual
+  // Calcular el índice de recordatorios que se muestran en la página actual
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentGastos = gastos.slice(indexOfFirstItem, indexOfLastItem);
+  const currentRecordatorios = recordatorios.slice(indexOfFirstItem, indexOfLastItem);
 
   // Cambiar página
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
   return (
     <div className="bg-white rounded-lg shadow-md p-6 max-w-3xl mx-auto">
-      <h2 className="text-lg font-semibold">Últimos gastos registrados</h2>
-      <p className="text-sm text-gray-500 mb-3">Revisa tus gastos</p>
+      <h2 className="text-lg font-semibold">Lista de Recordatorios</h2>
+      <p className="text-sm text-gray-500 mb-3">Revisa tus recordatorios</p>
 
       <div className="overflow-x-auto border rounded-lg">
         <table className="min-w-full bg-white">
           <thead>
             <tr className="border-b">
               <th className="w-1/6 px-4 py-2 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">
-                Gasto
-              </th>
-              <th className="w-2/6 px-4 py-2 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">
                 Descripción
               </th>
               <th className="w-1/6 px-4 py-2 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">
                 Fecha
               </th>
-              <th className="w-1/6 px-4 py-2 text-right text-xs font-semibold text-gray-500 uppercase tracking-wider">
-                Cantidad
-              </th>
               <th className="w-1/12 px-4 py-2"></th>
             </tr>
           </thead>
           <tbody>
-            {currentGastos.map((gasto, index) => (
+            {currentRecordatorios.map((recordatorio, index) => (
               <tr key={index} className="border-b hover:bg-gray-50">
-                <td className="flex items-center px-4 py-2 space-x-3">
-                  <span>{getIconForCategory(gasto.nombre_categoria)}</span>
-                  <span className="font-medium text-gray-700">
-                    {gasto.nombre_categoria}
-                  </span>
+                <td className="px-4 py-2 text-gray-700 font-medium">
+                  {recordatorio.descripcion}
                 </td>
                 <td className="px-4 py-2 text-gray-500 text-sm">
-                  {gasto.descripcion || "Sin descripción"}
-                </td>
-                <td className="px-4 py-2 text-gray-500 text-sm">
-                  {new Date(gasto.fecha).toLocaleDateString()}
-                </td>
-                <td
-                  className={`px-4 py-2 text-right font-semibold ${
-                    gasto.monto < 0 ? "text-red-500" : "text-red-500"
-                  }`}
-                >
-                  {gasto.monto < 0 ? `-$${gasto.monto}` : `-$${gasto.monto}`}
+                  {new Date(recordatorio.fecha_recordatorio).toLocaleDateString()}
                 </td>
                 <td className="px-4 py-2 text-right flex space-x-2">
-                  <button onClick={() => handleEditClick(gasto)}>
+                  <button onClick={() => handleEditClick(recordatorio)}>
                     <Edit className="text-blue-500 cursor-pointer" />
                   </button>
-                  <button onClick={() => handleDeleteClick(gasto)}>
+                  <button onClick={() => handleDeleteClick(recordatorio)}>
                     <Trash2 className="text-red-500 cursor-pointer" />
                   </button>
                 </td>
@@ -136,7 +112,7 @@ export default function GastosList({ refreshExpenses }) {
       {/* Paginación */}
       <div className="flex justify-center mt-4">
         {Array.from(
-          { length: Math.ceil(gastos.length / itemsPerPage) },
+          { length: Math.ceil(recordatorios.length / itemsPerPage) },
           (_, i) => (
             <button
               key={i}
@@ -151,12 +127,12 @@ export default function GastosList({ refreshExpenses }) {
         )}
       </div>
 
-      {isEditModalOpen && selectedGasto && (
-        <EditExpenseModal
+      {isEditModalOpen && selectedRecordatorio && (
+        <EditReminderModal
           isOpen={isEditModalOpen}
           onClose={() => setIsEditModalOpen(false)}
-          gasto={selectedGasto}
-          onExpenseUpdated={cargarGastos}
+          recordatorio={selectedRecordatorio}
+          onReminderUpdated={cargarRecordatorios}
         />
       )}
 
@@ -164,7 +140,7 @@ export default function GastosList({ refreshExpenses }) {
         <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50">
           <div className="bg-white rounded-lg shadow-lg w-80 p-6">
             <h2 className="text-lg font-semibold mb-4">
-              ¿Seguro que deseas eliminar este gasto?
+              ¿Seguro que deseas eliminar este recordatorio?
             </h2>
             <div className="flex justify-end space-x-2">
               <button
@@ -187,12 +163,6 @@ export default function GastosList({ refreshExpenses }) {
   );
 }
 
-GastosList.propTypes = {
-  refreshExpenses: PropTypes.bool.isRequired, // Añadido refreshExpenses como prop requerido
-  token: PropTypes.string,
-  setGastos: PropTypes.func,
-  selectedGasto: PropTypes.object,
-  isEditModalOpen: PropTypes.bool,
-  isDeleteModalOpen: PropTypes.bool,
-  confirmDelete: PropTypes.func,
+RemindersList.propTypes = {
+  refreshReminders: PropTypes.bool.isRequired,
 };
